@@ -4,6 +4,8 @@ import { usePatient } from '../../hooks/usePatient';
 import { theme } from '@/constants/theme';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
+import i18n from '@/lib/i18n';
+import { useThemeColor } from '@/hooks/use-theme-color';
 
 const PatientsScreen = () => {
   const { patients } = usePatient();
@@ -11,20 +13,24 @@ const PatientsScreen = () => {
   const renderItem = ({ item }) => (
     <Link href={`/patient/${item.id}`} asChild>
       <TouchableOpacity style={styles.patientCard}>
-        <View style={[styles.profileImage, { backgroundColor: item.background_color }]} />
+        <View style={[styles.profileImage, { backgroundColor: item.bg_color_hex || '#ccc' }]} />
         <View style={styles.patientInfo}>
-          <Text style={styles.patientName}>{item.name}</Text>
-          <Text style={styles.patientRelationship}>{item.relationship}</Text>
+          <Text style={[styles.patientName, { color: textColor }]}>{item.name}</Text>
+          <Text style={styles.patientRelationship}>{item.relation}</Text>
         </View>
         <MaterialIcons name="chevron-right" size={24} color="#ccc" />
       </TouchableOpacity>
     </Link>
   );
 
+  const backgroundColor = useThemeColor({}, 'background');
+  const textColor = useThemeColor({}, 'text');
+  const headerBackground = useThemeColor({}, 'card');
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Patients</Text>
+    <SafeAreaView style={[styles.container, { backgroundColor }]}>
+      <View style={[styles.header, { backgroundColor: headerBackground }]}>
+        <Text style={[styles.headerTitle, { color: textColor }]}>{i18n.t('bottom_nav.patients')}</Text>
         <Link href="/patient/new" asChild>
           <TouchableOpacity style={styles.addButton}>
             <MaterialIcons name="add" size={24} color={theme.palette.white} />

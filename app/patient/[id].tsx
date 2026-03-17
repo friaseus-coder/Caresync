@@ -4,6 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { usePatient } from '../../hooks/usePatient';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { MaterialIcons } from '@expo/vector-icons';
+import i18n from '@/lib/i18n';
 
 const PatientFormScreen = () => {
   const { id } = useLocalSearchParams();
@@ -11,12 +12,12 @@ const PatientFormScreen = () => {
   const { patients, addPatient, updatePatient, deletePatient } = usePatient();
 
   const [isNew, setIsNew] = useState(true);
-  const [patient, setPatient] = useState(null);
+  const [patient, setPatient] = useState<any>(null);
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [relationship, setRelationship] = useState('');
   const [notes, setNotes] = useState('');
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePicture, setProfilePicture] = useState<string | undefined>(undefined);
   const [backgroundColor, setBackgroundColor] = useState('');
 
   const colors = [useThemeColor({}, 'tint'), '#E6E6FA', '#FFD1DC', '#B0E0E6', '#F0FFF0', '#FFFACD'];
@@ -28,11 +29,11 @@ const PatientFormScreen = () => {
         setPatient(existingPatient);
         setIsNew(false);
         setName(existingPatient.name);
-        setAge(existingPatient.age.toString());
-        setRelationship(existingPatient.relationship);
-        setNotes(existingPatient.notes);
-        setProfilePicture(existingPatient.profile_picture);
-        setBackgroundColor(existingPatient.background_color);
+        setAge(''); // age is not in Patient interface yet, but used in form
+        setRelationship(existingPatient.relation || '');
+        setNotes(''); // notes is not in Patient interface yet, but used in form
+        setProfilePicture(existingPatient.profile_pic_uri || undefined);
+        setBackgroundColor(existingPatient.bg_color_hex || colors[0]);
       }
     } else {
       setIsNew(true);
@@ -43,11 +44,9 @@ const PatientFormScreen = () => {
   const handleSave = () => {
     const patientData = {
       name,
-      age: parseInt(age, 10),
-      relationship,
-      notes,
-      profile_picture: profilePicture,
-      background_color: backgroundColor,
+      relation: relationship,
+      profile_pic_uri: profilePicture,
+      bg_color_hex: backgroundColor,
     };
 
     if (isNew) {
@@ -78,7 +77,7 @@ const PatientFormScreen = () => {
           <TouchableOpacity onPress={() => router.back()}>
             <MaterialIcons name="arrow-back" size={24} color={textColor} />
           </TouchableOpacity>
-          <Text style={[styles.appBarTitle, {color: textColor}]}>{isNew ? 'New Patient' : 'Edit Patient'}</Text>
+          <Text style={[styles.appBarTitle, {color: textColor}]}>{isNew ? i18n.t('patient_form.new_title') : i18n.t('patient_form.edit_title')}</Text>
           <TouchableOpacity onPress={handleSave}>
             <MaterialIcons name="check" size={24} color={primaryColor} />
           </TouchableOpacity>
@@ -89,7 +88,7 @@ const PatientFormScreen = () => {
             <Image 
               // TODO: Replace with a proper image picker
               source={{ uri: profilePicture || 'https://via.placeholder.com/150' }} 
-              style={[styles.profileImage, { borderColor: backgroundColor }]} 
+              style={[styles.profileImage, { borderColor: backgroundColor || 'transparent' }]} 
             />
             <TouchableOpacity style={[styles.editButton, {backgroundColor: primaryColor}]}>
               <MaterialIcons name="edit" size={16} color={white} />
@@ -99,8 +98,8 @@ const PatientFormScreen = () => {
 
         <View style={styles.mainContent}>
             <View style={styles.section}>
-                <Text style={[styles.sectionTitle, {color: textColor}]}>Personalization</Text>
-                <Text style={[styles.sectionSubtitle, {color: textColor}]}>Patient Color Context</Text>
+                <Text style={[styles.sectionTitle, {color: textColor}]}>{i18n.t('patient_form.personalization')}</Text>
+                <Text style={[styles.sectionSubtitle, {color: textColor}]}>{i18n.t('patient_form.color_context')}</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.colorPickerContainer}>
                 {colors.map((color) => (
                     <TouchableOpacity 
@@ -114,21 +113,21 @@ const PatientFormScreen = () => {
 
             <View style={styles.section}>
                 <View style={styles.infoField}>
-                    <Text style={[styles.infoLabel, {color: textColor}]}>Full Name</Text>
+                    <Text style={[styles.infoLabel, {color: textColor}]}>{i18n.t('patient_form.full_name')}</Text>
                     <TextInput style={[styles.infoInput, {color: textColor}]} value={name} onChangeText={setName} />
                 </View>
                 <View style={styles.infoRow}>
                     <View style={[styles.infoField, { flex: 1 }]}>
-                        <Text style={[styles.infoLabel, {color: textColor}]}>Age</Text>
+                        <Text style={[styles.infoLabel, {color: textColor}]}>{i18n.t('patient_form.age')}</Text>
                         <TextInput style={[styles.infoInput, {color: textColor}]} value={age} onChangeText={setAge} keyboardType="numeric" />
                     </View>
                     <View style={[styles.infoField, { flex: 1 }]}>
-                        <Text style={[styles.infoLabel, {color: textColor}]}>Relation</Text>
+                        <Text style={[styles.infoLabel, {color: textColor}]}>{i18n.t('patient_form.relation')}</Text>
                         <TextInput style={[styles.infoInput, {color: textColor}]} value={relationship} onChangeText={setRelationship} />
                     </View>
                 </View>
                  <View style={styles.infoField}>
-                    <Text style={[styles.infoLabel, {color: textColor}]}>General Notes</Text>
+                    <Text style={[styles.infoLabel, {color: textColor}]}>{i18n.t('patient_form.notes')}</Text>
                     <View style={[styles.notesInputContainer, {backgroundColor: 'rgba(137, 208, 236, 0.1)', borderColor: 'rgba(137, 208, 236, 0.2)'}]}>
                         <MaterialIcons name="warning" size={16} color={primaryColor} style={{marginTop: 2}}/>
                         <TextInput style={[styles.notesInput, {color: textColor}]} value={notes} onChangeText={setNotes} multiline />
@@ -139,7 +138,7 @@ const PatientFormScreen = () => {
             {!isNew && (
               <View style={styles.section}>
                 <TouchableOpacity style={[styles.deleteButton, {backgroundColor: '#ff3b30'}]} onPress={handleDelete}>
-                  <Text style={[styles.deleteButtonText, {color: white}]}>Delete Patient</Text>
+                  <Text style={[styles.deleteButtonText, {color: white}]}>{i18n.t('patient_form.delete_patient')}</Text>
                 </TouchableOpacity>
               </View>
             )}

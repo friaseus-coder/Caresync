@@ -65,7 +65,24 @@
     "delete_patient": "Eliminar Pacient"
   },
   "camera": {
-    "no_access": "Sense accés a la càmera"
+    "no_access": "Sense accés a la càmera",
+    "no_device": "No s'ha trobat cap dispositiu de càmera"
+  },
+  "explore": {
+    "title": "Explorar",
+    "description": "Aquesta aplicació inclou codi d'exemple per ajudar-te a començar.",
+    "routing_title": "Enrutament basat en fitxers",
+    "routing_desc": "Aquesta aplicació té dues pantalles: %{screen1} i %{screen2}. El fitxer de disseny a %{layout} configura el navegador de pestanyes.",
+    "learn_more": "Més informació",
+    "platforms_title": "Suport per a Android, iOS i web",
+    "platforms_desc": "Pots obrir aquest projecte a Android, iOS i el web. Per obrir la versió web, pressiona %{key} a la terminal que executa aquest projecte.",
+    "images_title": "Imatges",
+    "images_desc": "Per a imatges estàtiques, pots usar els sufixos %{x2} i %{x3} per proporcionar fitxers per a diferents densitats de pantalla.",
+    "themes_title": "Components de mode clar i fosc",
+    "themes_desc": "Aquesta plantilla té suport per a mode clar i fosc. El hook %{hook} et permet inspeccionar quin és l'esquema de color actual de l'usuari, perquè puguis ajustar els colors de la interfície en conseqüència.",
+    "animations_title": "Animacions",
+    "animations_desc": "Aquesta plantilla inclou un exemple d'un component animat. El component %{component} utilitza la potent llibreria %{library} per crear una animació d'una mà saludant.",
+    "parallax_desc": "El component %{component} proporciona un efecte de paralax per a la imatge de la capçalera."
   },
   "auth": {
     "sign_out": "Tancar Sessió",
@@ -74,16 +91,24 @@
   "analytics": {
     "title": "Anàlisi de Laboratori",
     "scan_button": "Digitalitzar nova analítica",
-    "history_title": "Historial d'Analítiques",
+    "history_title": "Historial d'Anàlisis",
     "empty_state_text": "Encara no has digitalitzat cap analítica.",
-    "empty_state_subtext": "Utilitza el botó superior per començar."
+    "empty_state_subtext": "Utilitza el botó superior per començar.",
+    "ocr_no_text_alert": "No s'ha detectat prou text. Assegura't que el document estigui ben il·luminat.",
+    "ocr_live_results": "Detectant text en temps real...",
+    "ocr_confirm_button": "Confirmar Text Detectat"
   },
   "biometrics": {
     "title": "Mesuraments Biomètrics",
     "placeholder_name": "Nom del Mesurament",
     "placeholder_value": "Valor",
     "placeholder_unit": "Unitat",
-    "add_custom": "Afegir Mesurament Personalitzat"
+    "add_custom": "Afegir Mesurament Personalitzat",
+    "weight": "Pes",
+    "height": "Alçada",
+    "blood_pressure": "Pressió Arterial",
+    "blood_glucose": "Glucosa",
+    "save_measurement": "Guardar Mesurament"
   },
   "settings": {
     "title": "Ajustos",
@@ -121,11 +146,22 @@
     "selectStartDate": "Seleccionar Data d'Inici",
     "selectEndDate": "Seleccionar Data de Fi",
     "notes": "Notes",
-    "notesPlaceholder": "p.ex., amb menjar"
+    "notesPlaceholder": "p.ex., amb menjar",
+    "mark_as_taken": "Marcar com a Pres",
+    "snooze_15": "Posposar 15 min"
+  },
+  "notifications": {
+      "medication_reminder_title": "Recordatori de Medicació",
+      "medication_reminder_body": "És hora de prendre el teu %{name}"
   },
   "common": {
     "save": "Guardar",
     "error": "Error"
+  },
+  "backup": {
+    "email_subject": "Còpia de Seguretat de Dades de CareSync",
+    "email_body": "S'adjunta la còpia de seguretat de les dades de l'aplicació.",
+    "error_mail_unavailable": "El servei de correu no està disponible en aquest dispositiu."
   },
   "frequency": {
     "daily": "Diàriament",

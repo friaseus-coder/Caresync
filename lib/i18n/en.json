@@ -65,7 +65,24 @@
     "delete_patient": "Delete Patient"
   },
   "camera": {
-    "no_access": "No access to camera"
+    "no_access": "No access to camera",
+    "no_device": "No camera device found"
+  },
+  "explore": {
+    "title": "Explore",
+    "description": "This app includes example code to help you get started.",
+    "routing_title": "File-based routing",
+    "routing_desc": "This app has two screens: %{screen1} and %{screen2}. The layout file in %{layout} sets up the tab navigator.",
+    "learn_more": "Learn more",
+    "platforms_title": "Android, iOS, and web support",
+    "platforms_desc": "You can open this project on Android, iOS, and the web. To open the web version, press %{key} in the terminal running this project.",
+    "images_title": "Images",
+    "images_desc": "For static images, you can use the %{x2} and %{x3} suffixes to provide files for different screen densities.",
+    "themes_title": "Light and dark mode components",
+    "themes_desc": "This template has light and dark mode support. The %{hook} hook lets you inspect what the user's current color scheme is, and so you can adjust UI colors accordingly.",
+    "animations_title": "Animations",
+    "animations_desc": "This template includes an example of an animated component. The %{component} component uses the powerful %{library} library to create a waving hand animation.",
+    "parallax_desc": "The %{component} component provides a parallax effect for the header image."
   },
   "auth": {
     "sign_out": "Sign Out",
@@ -76,14 +93,22 @@
     "scan_button": "Scan new analytics",
     "history_title": "Analytics History",
     "empty_state_text": "You haven't scanned any analytics yet.",
-    "empty_state_subtext": "Use the button above to start."
+    "empty_state_subtext": "Use the button above to start.",
+    "ocr_no_text_alert": "Not enough text detected. Please ensure the document is well lit.",
+    "ocr_live_results": "Detecting text in real-time...",
+    "ocr_confirm_button": "Confirm Detected Text"
   },
   "biometrics": {
     "title": "Biometric Measurements",
     "placeholder_name": "Measurement Name",
     "placeholder_value": "Value",
     "placeholder_unit": "Unit",
-    "add_custom": "Add Custom Measurement"
+    "add_custom": "Add Custom Measurement",
+    "weight": "Weight",
+    "height": "Height",
+    "blood_pressure": "Blood Pressure",
+    "blood_glucose": "Blood Glucose",
+    "save_measurement": "Save Measurement"
   },
   "settings": {
     "title": "Settings",
@@ -121,15 +146,21 @@
     "selectStartDate": "Select Start Date",
     "selectEndDate": "Select End Date",
     "notes": "Notes",
-    "notesPlaceholder": "e.g., with food"
+    "notesPlaceholder": "e.g., with food",
+    "mark_as_taken": "Mark as Taken",
+    "snooze_15": "Snooze 15 min"
+  },
+  "notifications": {
+      "medication_reminder_title": "Medication Reminder",
+      "medication_reminder_body": "It's time to take your %{name}"
   },
   "common": {
     "save": "Save",
     "error": "Error"
   },
-  "frequency": {
-    "daily": "Daily",
-    "weekly": "Weekly",
-    "asNeeded": "As Needed"
+  "backup": {
+    "email_subject": "CareSync Data Backup",
+    "email_body": "The application data backup is attached.",
+    "error_mail_unavailable": "The email service is not available on this device."
   }
 }

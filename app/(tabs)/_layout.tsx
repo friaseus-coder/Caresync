@@ -40,7 +40,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="biometrics"
         options={{
-          title: 'Biometría',
+          title: i18n.t('biometrics.title'),
           tabBarIcon: ({ color }) => <MaterialIcons name="monitor-heart" size={24} color={color} />,
         }}
       />

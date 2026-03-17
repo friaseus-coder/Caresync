@@ -1,32 +1,46 @@
-
 import * as MailComposer from 'expo-mail-composer';
 import * as FileSystem from 'expo-file-system';
+const { documentDirectory } = FileSystem;
+import i18n from './i18n';
 
-// Dummy data for the purpose of this example
-const dummyData = {
-  users: [{ id: 1, name: 'John Doe' }],
-  patients: [{ id: 1, name: 'Jane Doe', userId: 1 }],
-  medications: [{ id: 1, name: 'Aspirin', patientId: 1 }],
-  analytics: [{ id: 1, type: 'Blood Pressure', value: '120/80' }],
-  biometrics: [{ id: 1, type: 'Weight', value: '70kg' }],
+import * as SQLite from 'expo-sqlite';
+
+const DATABASE_NAME = 'caresync_v1.db';
+
+const simpleEncrypt = (text: string, key: string) => {
+  let result = '';
+  for (let i = 0; i < text.length; i++) {
+    result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+  }
+  return btoa(result);
 };
 
 export const exportData = async () => {
-  const dataString = JSON.stringify(dummyData, null, 2);
-  const fileUri = FileSystem.documentDirectory + 'backup.json';
+  const dbPath = (documentDirectory || '') + 'SQLite/' + DATABASE_NAME;
+  const fileInfo = await FileSystem.getInfoAsync(dbPath);
+  
+  if (!fileInfo.exists) {
+    console.error("Database file not found for backup");
+    return;
+  }
 
-  await FileSystem.writeAsStringAsync(fileUri, dataString);
+  // Read the database file as string
+  const data = await FileSystem.readAsStringAsync(dbPath, { encoding: 'base64' });
+  const encryptedData = simpleEncrypt(data, 'caresync_secret_key');
+  
+  const fileUri = (documentDirectory || '') + 'caresync_backup.enc';
+  await FileSystem.writeAsStringAsync(fileUri, encryptedData);
 
   const isAvailable = await MailComposer.isAvailableAsync();
 
   if (isAvailable) {
     await MailComposer.composeAsync({
       recipients: [],
-      subject: 'Backup de Datos de CareSync',
-      body: 'Adjunto se encuentra el backup de los datos de la aplicación.',
+      subject: i18n.t('backup.email_subject'),
+      body: i18n.t('backup.email_body'),
       attachments: [fileUri],
     });
   } else {
-    alert('El servicio de correo no está disponible en este dispositivo.');
+    alert(i18n.t('backup.error_mail_unavailable'));
   }
 };

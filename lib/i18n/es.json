@@ -65,7 +65,8 @@
     "delete_patient": "Eliminar Paciente"
   },
   "camera": {
-    "no_access": "Sin acceso a la cámara"
+    "no_access": "Sin acceso a la cámara",
+    "no_device": "No se encontró ningún dispositivo de cámara"
   },
   "auth": {
     "sign_out": "Cerrar Sesión",
@@ -76,14 +77,22 @@
     "scan_button": "Digitalizar nueva analítica",
     "history_title": "Historial de Analíticas",
     "empty_state_text": "Aún no has digitalizado ninguna analítica.",
-    "empty_state_subtext": "Usa el botón superior para empezar."
+    "empty_state_subtext": "Usa el botón superior para empezar.",
+    "ocr_no_text_alert": "No se detectó suficiente texto. Asegúrate de que el documento esté bien iluminado.",
+    "ocr_live_results": "Detectando texto en tiempo real...",
+    "ocr_confirm_button": "Confirmar Texto Detectado"
   },
   "biometrics": {
     "title": "Mediciones Biométricas",
     "placeholder_name": "Nombre de la Medición",
     "placeholder_value": "Valor",
     "placeholder_unit": "Unidad",
-    "add_custom": "Añadir Medición Personalizada"
+    "add_custom": "Añadir Medición Personalizada",
+    "weight": "Peso",
+    "height": "Altura",
+    "blood_pressure": "Presión Arterial",
+    "blood_glucose": "Glucosa",
+    "save_measurement": "Guardar Medición"
   },
   "settings": {
     "title": "Ajustes",
@@ -121,11 +130,22 @@
     "selectStartDate": "Seleccionar Fecha de Inicio",
     "selectEndDate": "Seleccionar Fecha de Fin",
     "notes": "Notas",
-    "notesPlaceholder": "p.ej., con comida"
+    "notesPlaceholder": "p.ej., con comida",
+    "mark_as_taken": "Marcar como Tomado",
+    "snooze_15": "Posponer 15 min"
+  },
+  "notifications": {
+      "medication_reminder_title": "Recordatorio de Medicación",
+      "medication_reminder_body": "Es hora de tomar tu %{name}"
   },
   "common": {
     "save": "Guardar",
     "error": "Error"
+  },
+  "backup": {
+    "email_subject": "Respaldo de Datos de CareSync",
+    "email_body": "Se adjunta el respaldo de los datos de la aplicación.",
+    "error_mail_unavailable": "El servicio de correo no está disponible en este dispositivo."
   },
   "frequency": {
     "daily": "Diariamente",

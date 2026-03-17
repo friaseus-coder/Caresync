@@ -1,9 +1,13 @@
 
 import { useState, useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
+import { SchedulableTriggerInputTypes, NotificationTriggerInput } from 'expo-notifications';
 import { Platform } from 'react-native';
 import { useAuth } from '../hooks/useAuth';
 import { useDB } from './use-db';
+import * as schema from './db/schema';
+import { eq } from 'drizzle-orm';
+import i18n from './i18n';
 
 export interface Medication {
   id: number;
@@ -68,17 +72,31 @@ export const useMedication = () => {
   };
 
   const fetchMedications = async () => {
-    const allRows = await db.getAllAsync<Medication>('SELECT * FROM Medications');
-    setMedications(allRows);
+    if (!db) return;
+    const allMedications = await db.query.medications.findMany();
+    // Map to the interface Medication if needed, though Drizzle will provide its own types
+    setMedications(allMedications as unknown as Medication[]); 
   };
 
   const addMedication = async (medication: MedicationToAdd) => {
     const { patient_id, name, dosage, intake_frequency, intake_times, start_date, end_date, notes } = medication;
 
-    const result = await db.runAsync(
-      'INSERT INTO Medications (patient_id, name, dosage, intake_frequency, intake_times, start_date, end_date, notes) values (?, ?, ?, ?, ?, ?, ?, ?)',
-      [patient_id, name, dosage, intake_frequency, intake_times, start_date, end_date, notes]
-    );
+    if (!db) return;
+
+    const result = await db.insert(schema.medications).values({
+      patientId: patient_id,
+      name,
+      dosage,
+      intakeFrequency: intake_frequency,
+      intakeTimes: intake_times,
+      startDate: start_date,
+      endDate: end_date,
+      generalNotes: notes,
+      frequencyType: intake_frequency, // Adjust if these definitions differ
+      frequencyInterval: 1, // Placeholder
+    }).returning({ insertedId: schema.medications.id });
+
+    const insertedId = result[0].insertedId;
 
     const notificationMedication: NotificationData = {
       name,
@@ -87,13 +105,13 @@ export const useMedication = () => {
       intakeTimes: intake_times,
     };
 
-    await scheduleIntakeNotifications(notificationMedication, result.lastInsertRowId);
+    await scheduleIntakeNotifications(notificationMedication, insertedId);
     if (accessToken) {
       const calendarMedication: CalendarEventData = {
         ...notificationMedication,
         notes,
       };
-      await createCalendarEvent(calendarMedication, result.lastInsertRowId);
+      await createCalendarEvent(calendarMedication, insertedId);
     }
     fetchMedications();
   };
@@ -109,19 +127,25 @@ export const useMedication = () => {
       if (notificationDate.getTime() > Date.now()) {
         const notificationId = await Notifications.scheduleNotificationAsync({
           content: {
-            title: 'Recordatorio de Medicación',
-            body: `Es hora de tomar tu ${name}`,
+            title: i18n.t('notifications.medication_reminder_title'),
+            body: i18n.t('notifications.medication_reminder_body', { name }),
+            data: { medicationId, scheduledTime: timestamp },
+            categoryIdentifier: 'medication-reminder',
           },
           trigger: {
-            type: 'date',
+            type: SchedulableTriggerInputTypes.DATE,
             date: notificationDate,
-          },
+          } as NotificationTriggerInput,
         });
 
-        await db.runAsync(
-          'INSERT INTO Intakes (medication_id, scheduled_time, status, local_notification_id) values (?, ?, ?, ?)',
-          [medicationId, timestamp, 'pending', notificationId]
-        );
+        if (!db) return;
+        
+        await db.insert(schema.intakes).values({
+          medicationId,
+          scheduledTime: timestamp,
+          status: 'pending',
+          localNotificationId: notificationId,
+        });
       }
     }
   };

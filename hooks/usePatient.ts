@@ -1,6 +1,8 @@
 
 import { useState, useEffect } from 'react';
 import { useDB } from '../lib/use-db';
+import * as schema from '../lib/db/schema';
+import { eq } from 'drizzle-orm';
 
 export interface Patient {
   id: number;
@@ -9,7 +11,7 @@ export interface Patient {
   profile_pic_uri?: string;
   bg_color_hex?: string;
   custom_measurement_fields?: string;
-  created_at: string;
+  created_at?: string;
 }
 
 // For addPatient, we don't have an id yet.
@@ -26,19 +28,23 @@ export const usePatient = () => {
   }, [db]);
 
   const fetchPatients = async () => {
-    // The result from getAllAsync will be an array of objects.
-    // It's a good practice to type it.
-    const allRows = await db.getAllAsync<Patient>('SELECT * FROM Patients');
-    setPatients(allRows);
+    if (!db) return;
+    const allPatients = await db.query.patients.findMany();
+    setPatients(allPatients as unknown as Patient[]);
   };
 
   const addPatient = async (patient: Partial<PatientToAdd>) => {
     const { name, relation, profile_pic_uri, bg_color_hex, custom_measurement_fields } = patient;
 
-    await db.runAsync(
-      'INSERT INTO Patients (name, relation, profile_pic_uri, bg_color_hex, custom_measurement_fields) values (?, ?, ?, ?, ?)',
-      [name, relation, profile_pic_uri, bg_color_hex, custom_measurement_fields]
-    );
+    if (!db) return;
+
+    await db.insert(schema.patients).values({
+      name: name!,
+      relation,
+      profilePicUri: profile_pic_uri,
+      bgColorHex: bg_color_hex,
+      customMeasurementFields: custom_measurement_fields,
+    });
 
     fetchPatients();
   };
@@ -46,16 +52,24 @@ export const usePatient = () => {
   const updatePatient = async (patient: Patient) => {
     const { id, name, relation, profile_pic_uri, bg_color_hex, custom_measurement_fields } = patient;
 
-    await db.runAsync(
-      'UPDATE Patients SET name = ?, relation = ?, profile_pic_uri = ?, bg_color_hex = ?, custom_measurement_fields = ? WHERE id = ?',
-      [name, relation, profile_pic_uri, bg_color_hex, custom_measurement_fields, id]
-    );
+    if (!db) return;
+
+    await db.update(schema.patients)
+      .set({
+        name,
+        relation,
+        profilePicUri: profile_pic_uri,
+        bgColorHex: bg_color_hex,
+        customMeasurementFields: custom_measurement_fields,
+      })
+      .where(eq(schema.patients.id, id));
 
     fetchPatients();
   };
 
   const deletePatient = async (id: number) => {
-    await db.runAsync('DELETE FROM Patients WHERE id = ?', [id]);
+    if (!db) return;
+    await db.delete(schema.patients).where(eq(schema.patients.id, id));
     fetchPatients();
   };
 

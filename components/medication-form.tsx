@@ -1,13 +1,13 @@
 
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Platform } from 'react-native';
-import { useTranslation } from 'react-i18next';
+import i18n from '../lib/i18n';
 import { useMedication } from '../lib/useMedication';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker'; // Importar Picker
 
 const MedicationForm = () => {
-  const { t } = useTranslation();
+  const t = i18n.t.bind(i18n);
   const [medicationName, setMedicationName] = useState('');
   const [dosage, setDosage] = useState('');
   const [patientId, setPatientId] = useState('');
@@ -27,14 +27,14 @@ const MedicationForm = () => {
   const handleSave = () => {
     // TODO: Implement actual patient ID handling
     const newMedication = {
-        patientId: parseInt(patientId) || 1, 
+        patient_id: parseInt(patientId) || 1, 
         name: medicationName,
         dosage: dosage,
-        intakeFrequency: intakeFrequency,
+        intake_frequency: intakeFrequency,
         // Formatear las horas como strings (HH:mm) antes de guardarlas
-        intakeTimes: JSON.stringify(intakeTimes.map(date => date.toTimeString().slice(0, 5))),
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
+        intake_times: JSON.stringify(intakeTimes.map(date => date.toTimeString().slice(0, 5))),
+        start_date: startDate.toISOString(),
+        end_date: endDate.toISOString(),
         notes: notes
     };
     addMedication(newMedication);
@@ -49,7 +49,7 @@ const MedicationForm = () => {
     setNotes('');
   };
 
-  const handleIntakeTimeChange = (event, selectedDate, index) => {
+  const handleIntakeTimeChange = (event: any, selectedDate: Date | undefined, index: number) => {
     const newIntakeTimes = [...intakeTimes];
     if (selectedDate) {
         newIntakeTimes[index] = selectedDate;
@@ -62,14 +62,14 @@ const MedicationForm = () => {
     setIntakeTimes([...intakeTimes, new Date()]);
   };
 
-  const onStartDateChange = (event, selectedDate) => {
+  const onStartDateChange = (event: any, selectedDate: Date | undefined) => {
     setShowStartDatePicker(false); // Ocultar siempre el selector
     if (selectedDate) {
         setStartDate(selectedDate);
     }
   };
 
-  const onEndDateChange = (event, selectedDate) => {
+  const onEndDateChange = (event: any, selectedDate: Date | undefined) => {
     setShowEndDatePicker(false); // Ocultar siempre el selector
     if (selectedDate) {
         setEndDate(selectedDate);

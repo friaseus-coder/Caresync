@@ -19,14 +19,22 @@ const SettingsScreen = () => {
     }
   };
 
-  const Section = ({ title, children }) => (
+  const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>{title}</Text>
       <View style={styles.sectionCard}>{children}</View>
     </View>
   );
 
-  const SettingRow = ({ icon, label, isSwitch, value, onValueChange, onPress, customContent }) => (
+  const SettingRow = ({ icon, label, isSwitch = false, value = false, onValueChange = () => {}, onPress = () => {}, customContent = null }: { 
+    icon: any, 
+    label: string, 
+    isSwitch?: boolean, 
+    value?: boolean, 
+    onValueChange?: (val: boolean) => void, 
+    onPress?: () => void, 
+    customContent?: React.ReactNode 
+  }) => (
     <TouchableOpacity style={styles.settingRow} onPress={onPress} disabled={isSwitch}>
       <View style={styles.settingLabelContainer}>
         <MaterialIcons name={icon} size={24} color={theme.palette.primary} />

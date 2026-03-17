@@ -1,19 +1,24 @@
 
 import * as SQLite from 'expo-sqlite';
 import { useEffect, useState } from 'react';
+import { drizzle, ExpoSQLiteDatabase } from 'drizzle-orm/expo-sqlite';
+import * as schema from './db/schema';
 
 const DATABASE_NAME = 'caresync_v1.db';
 
 export const useDB = () => {
-  const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
+  const [db, setDb] = useState<ExpoSQLiteDatabase<typeof schema> | null>(null);
 
   useEffect(() => {
     const setup = async () => {
       try {
         console.log("Opening database...");
-        const database = await SQLite.openDatabaseAsync(DATABASE_NAME);
+        const sqlite = await SQLite.openDatabaseAsync(DATABASE_NAME);
         console.log("Database opened successfully.");
-        await database.execAsync(
+        
+        // Manual schema creation if not using migrations yet
+        // This maintains the original behavior but prepares for Drizzle
+        await sqlite.execAsync(
           'CREATE TABLE IF NOT EXISTS Patients (' +
           'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
           'name TEXT NOT NULL,' +
@@ -25,7 +30,7 @@ export const useDB = () => {
           ');'
         );
     
-        await database.execAsync(
+        await sqlite.execAsync(
           'CREATE TABLE IF NOT EXISTS Medications (' +
           'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
           'patient_id INTEGER NOT NULL,' +
@@ -36,11 +41,14 @@ export const useDB = () => {
           'frequency_type TEXT NOT NULL,' +
           'frequency_interval INTEGER NOT NULL,' +
           'general_notes TEXT,' +
+          'dosage TEXT,' +
+          'intake_frequency TEXT,' +
+          'intake_times TEXT,' +
           'FOREIGN KEY(patient_id) REFERENCES Patients(id)' +
           ');'
         );
     
-        await database.execAsync(
+        await sqlite.execAsync(
           'CREATE TABLE IF NOT EXISTS Intakes (' +
           'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
           'medication_id INTEGER NOT NULL,' +
@@ -54,7 +62,7 @@ export const useDB = () => {
           ');'
         );
     
-        await database.execAsync(
+        await sqlite.execAsync(
           'CREATE TABLE IF NOT EXISTS Measurements (' +
           'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
           'patient_id INTEGER NOT NULL,' +
@@ -69,7 +77,7 @@ export const useDB = () => {
           ');'
         );
     
-        await database.execAsync(
+        await sqlite.execAsync(
           'CREATE TABLE IF NOT EXISTS Analytics_Records (' +
           'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
           'patient_id INTEGER NOT NULL,' +
@@ -81,7 +89,8 @@ export const useDB = () => {
           ');'
         );
 
-        setDb(database);
+        const drizzleDb = drizzle(sqlite, { schema });
+        setDb(drizzleDb);
       } catch (error) {
         console.error("Error setting up database:", error);
       }

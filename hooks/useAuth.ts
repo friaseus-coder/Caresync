@@ -23,7 +23,10 @@ export const useAuth = () => {
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
     iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
-    scopes: ['https://www.googleapis.com/auth/calendar.events'],
+    scopes: [
+      'https://www.googleapis.com/auth/calendar.events',
+      'https://www.googleapis.com/auth/drive.file'
+    ],
   });
 
   useEffect(() => {

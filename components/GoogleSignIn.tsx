@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Button } from 'react-native';
 import { useAuth } from '../hooks/useAuth';
+import i18n from '@/lib/i18n';
 
 const GoogleSignIn = () => {
   const { signIn, signOut, user } = useAuth();
@@ -9,9 +10,9 @@ const GoogleSignIn = () => {
   return (
     <View>
       {user ? (
-        <Button title="Sign Out" onPress={signOut} />
+        <Button title={i18n.t('auth.sign_out')} onPress={signOut} />
       ) : (
-        <Button title="Sign in with Google" onPress={() => signIn()} />
+        <Button title={i18n.t('auth.sign_in')} onPress={() => signIn()} />
       )}
     </View>
   );
