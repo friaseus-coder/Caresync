@@ -2,7 +2,7 @@
 import * as SQLite from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 
-const DATABASE_NAME = 'caresync.db';
+const DATABASE_NAME = 'caresync_v1.db';
 
 export const useDB = () => {
   const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
@@ -10,8 +10,9 @@ export const useDB = () => {
   useEffect(() => {
     const setup = async () => {
       try {
+        console.log("Opening database...");
         const database = await SQLite.openDatabaseAsync(DATABASE_NAME);
-        
+        console.log("Database opened successfully.");
         await database.execAsync(
           'CREATE TABLE IF NOT EXISTS Patients (' +
           'id INTEGER PRIMARY KEY AUTOINCREMENT,' +

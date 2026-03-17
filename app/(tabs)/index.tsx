@@ -42,7 +42,7 @@ export default function HomeScreen() {
     const cardBorderColor = useThemeColor({}, 'cardBorder');
     const white = useThemeColor({light: '#fff', dark: '#000'}, 'background');
     
-    const currentDate = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }).replace('.','');
+    const currentDate = new Date().toLocaleDateString(i18n.locale, { day: 'numeric', month: 'short' }).replace('.','');
 
     if (loading) {
         return <ActivityIndicator style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}/>

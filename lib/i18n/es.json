@@ -39,6 +39,74 @@
     "analytics": "Análisis",
     "settings": "Ajustes"
   },
+  "new_patient": {
+    "title": "Añadir Nuevo Paciente",
+    "form": {
+      "add_photo": "Añadir Foto",
+      "name": "Nombre",
+      "name_placeholder": "Introduce el nombre completo",
+      "relation": "Parentesco",
+      "relation_placeholder": "Hijo, Madre, etc.",
+      "save": "Guardar Paciente",
+      "validations": {
+        "name_required": "Por favor, introduce un nombre."
+      }
+    }
+  },
+  "patient_form": {
+    "new_title": "Nuevo Paciente",
+    "edit_title": "Editar Paciente",
+    "personalization": "Personalización",
+    "color_context": "Contexto de Color del Paciente",
+    "full_name": "Nombre Completo",
+    "age": "Edad",
+    "relation": "Parentesco",
+    "notes": "Notas Generales",
+    "delete_patient": "Eliminar Paciente"
+  },
+  "camera": {
+    "no_access": "Sin acceso a la cámara"
+  },
+  "auth": {
+    "sign_out": "Cerrar Sesión",
+    "sign_in": "Iniciar sesión con Google"
+  },
+  "analytics": {
+    "title": "Análisis de Laboratorio",
+    "scan_button": "Digitalizar nueva analítica",
+    "history_title": "Historial de Analíticas",
+    "empty_state_text": "Aún no has digitalizado ninguna analítica.",
+    "empty_state_subtext": "Usa el botón superior para empezar."
+  },
+  "biometrics": {
+    "title": "Mediciones Biométricas",
+    "placeholder_name": "Nombre de la Medición",
+    "placeholder_value": "Valor",
+    "placeholder_unit": "Unidad",
+    "add_custom": "Añadir Medición Personalizada"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "sections": {
+      "general": "General",
+      "data": "Gestión de Datos",
+      "about": "Acerca de"
+    },
+    "rows": {
+      "language": "Idioma",
+      "dark_mode": "Modo Oscuro",
+      "notifications": "Notificaciones",
+      "sync_calendar": "Sincronizar Calendario",
+      "export_data": "Exportar Datos",
+      "import_data": "Importar Datos",
+      "help": "Ayuda y Soporte",
+      "privacy": "Política de Privacidad",
+      "about": "Sobre CareSync"
+    },
+    "errors": {
+      "export_failed": "No se pudo exportar los datos."
+    }
+  },
   "medication": {
     "name": "Nombre del Medicamento",
     "namePlaceholder": "p.ej., Ibuprofeno",
@@ -56,7 +124,8 @@
     "notesPlaceholder": "p.ej., con comida"
   },
   "common": {
-    "save": "Guardar"
+    "save": "Guardar",
+    "error": "Error"
   },
   "frequency": {
     "daily": "Diariamente",

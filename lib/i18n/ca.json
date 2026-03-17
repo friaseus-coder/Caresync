@@ -39,6 +39,74 @@
     "analytics": "Anàlisi",
     "settings": "Ajustos"
   },
+  "new_patient": {
+    "title": "Afegir Nou Pacient",
+    "form": {
+      "add_photo": "Afegir Foto",
+      "name": "Nom",
+      "name_placeholder": "Introdueix el nom complet",
+      "relation": "Parentiu",
+      "relation_placeholder": "Fill, Mare, etc.",
+      "save": "Guardar Pacient",
+      "validations": {
+        "name_required": "Si us plau, introdueix un nom."
+      }
+    }
+  },
+  "patient_form": {
+    "new_title": "Nou Pacient",
+    "edit_title": "Editar Pacient",
+    "personalization": "Personalització",
+    "color_context": "Context de Color del Pacient",
+    "full_name": "Nom Complet",
+    "age": "Edat",
+    "relation": "Parentiu",
+    "notes": "Notes Generals",
+    "delete_patient": "Eliminar Pacient"
+  },
+  "camera": {
+    "no_access": "Sense accés a la càmera"
+  },
+  "auth": {
+    "sign_out": "Tancar Sessió",
+    "sign_in": "Iniciar sessió amb Google"
+  },
+  "analytics": {
+    "title": "Anàlisi de Laboratori",
+    "scan_button": "Digitalitzar nova analítica",
+    "history_title": "Historial d'Analítiques",
+    "empty_state_text": "Encara no has digitalitzat cap analítica.",
+    "empty_state_subtext": "Utilitza el botó superior per començar."
+  },
+  "biometrics": {
+    "title": "Mesuraments Biomètrics",
+    "placeholder_name": "Nom del Mesurament",
+    "placeholder_value": "Valor",
+    "placeholder_unit": "Unitat",
+    "add_custom": "Afegir Mesurament Personalitzat"
+  },
+  "settings": {
+    "title": "Ajustos",
+    "sections": {
+      "general": "General",
+      "data": "Gestió de Dades",
+      "about": "Sobre"
+    },
+    "rows": {
+      "language": "Idioma",
+      "dark_mode": "Mode Fosc",
+      "notifications": "Notificacions",
+      "sync_calendar": "Sincronitzar Calendari",
+      "export_data": "Exportar Dades",
+      "import_data": "Importar Dades",
+      "help": "Ajuda i Suport",
+      "privacy": "Política de Privadesa",
+      "about": "Sobre CareSync"
+    },
+    "errors": {
+      "export_failed": "No s'han pogut exportar les dades."
+    }
+  },
   "medication": {
     "name": "Nom del Medicament",
     "namePlaceholder": "p.ex., Ibuprofèn",
@@ -56,7 +124,8 @@
     "notesPlaceholder": "p.ex., amb menjar"
   },
   "common": {
-    "save": "Guardar"
+    "save": "Guardar",
+    "error": "Error"
   },
   "frequency": {
     "daily": "Diàriament",

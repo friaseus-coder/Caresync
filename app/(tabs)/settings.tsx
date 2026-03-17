@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Swi
 import { theme } from '@/constants/theme';
 import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
+import i18n from '@/lib/i18n';
 import GoogleSignIn from '../../components/GoogleSignIn';
 import { exportData } from '../../lib/backup';
 
@@ -14,7 +15,7 @@ const SettingsScreen = () => {
     try {
       await exportData();
     } catch (error) {
-      Alert.alert('Error', 'No se pudo exportar los datos.');
+      Alert.alert(i18n.t('common.error'), i18n.t('settings.errors.export_failed'));
     }
   };
 
@@ -44,25 +45,25 @@ const SettingsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Ajustes</Text>
+        <Text style={styles.headerTitle}>{i18n.t('settings.title')}</Text>
       </View>
       <ScrollView contentContainerStyle={styles.mainContent}>
-        <Section title="General">
-          <SettingRow icon="language" label="Idioma" />
-          <SettingRow icon="dark-mode" label="Modo Oscuro" isSwitch value={isDarkMode} onValueChange={setIsDarkMode} />
-          <SettingRow icon="notifications" label="Notificaciones" isSwitch value={notificationsEnabled} onValueChange={setNotificationsEnabled} />
+        <Section title={i18n.t('settings.sections.general')}>
+          <SettingRow icon="language" label={i18n.t('settings.rows.language')} />
+          <SettingRow icon="dark-mode" label={i18n.t('settings.rows.dark_mode')} isSwitch value={isDarkMode} onValueChange={setIsDarkMode} />
+          <SettingRow icon="notifications" label={i18n.t('settings.rows.notifications')} isSwitch value={notificationsEnabled} onValueChange={setNotificationsEnabled} />
         </Section>
 
-        <Section title="Gestión de Datos">
-          <SettingRow icon="calendar-today" label="Sincronizar Calendario" customContent={<GoogleSignIn />} />
-          <SettingRow icon="download" label="Exportar Datos" onPress={handleExport} />
-          <SettingRow icon="upload" label="Importar Datos" />
+        <Section title={i18n.t('settings.sections.data')}>
+          <SettingRow icon="calendar-today" label={i18n.t('settings.rows.sync_calendar')} customContent={<GoogleSignIn />} />
+          <SettingRow icon="download" label={i18n.t('settings.rows.export_data')} onPress={handleExport} />
+          <SettingRow icon="upload" label={i18n.t('settings.rows.import_data')} />
         </Section>
 
-        <Section title="Acerca de">
-          <SettingRow icon="help-outline" label="Ayuda y Soporte" />
-          <SettingRow icon="privacy-tip" label="Política de Privacidad" />
-          <SettingRow icon="info-outline" label="Sobre CareSync" />
+        <Section title={i18n.t('settings.sections.about')}>
+          <SettingRow icon="help-outline" label={i18n.t('settings.rows.help')} />
+          <SettingRow icon="privacy-tip" label={i18n.t('settings.rows.privacy')} />
+          <SettingRow icon="info-outline" label={i18n.t('settings.rows.about')} />
         </Section>
       </ScrollView>
     </SafeAreaView>

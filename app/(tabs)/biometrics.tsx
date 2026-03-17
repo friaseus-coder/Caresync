@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import { theme } from '@/constants/theme';
 import { MaterialIcons } from '@expo/vector-icons';
+import i18n from '@/lib/i18n';
 
 // Dummy data for biometric measurements
 const initialMeasurements = [
@@ -30,17 +31,17 @@ const BiometricScreen = () => {
     <View style={styles.customFieldContainer}>
       <TextInput
         style={styles.customInput}
-        placeholder="Nombre de la Medición"
+        placeholder={i18n.t('biometrics.placeholder_name')}
         // Handle input changes
       />
       <TextInput
         style={styles.customInput}
-        placeholder="Valor"
+        placeholder={i18n.t('biometrics.placeholder_value')}
         // Handle input changes
       />
       <TextInput
         style={styles.customInput}
-        placeholder="Unidad"
+        placeholder={i18n.t('biometrics.placeholder_unit')}
         // Handle input changes
       />
     </View>
@@ -49,7 +50,7 @@ const BiometricScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Mediciones Biométricas</Text>
+        <Text style={styles.headerTitle}>{i18n.t('biometrics.title')}</Text>
       </View>
       <ScrollView>
         <View style={styles.mainContent}>
@@ -66,7 +67,7 @@ const BiometricScreen = () => {
           />
           <TouchableOpacity style={styles.addButton} onPress={addCustomField}>
             <MaterialIcons name="add-circle" size={24} color={theme.palette.primary} />
-            <Text style={styles.addButtonLabel}>Añadir Medición Personalizada</Text>
+            <Text style={styles.addButtonLabel}>{i18n.t('biometrics.add_custom')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

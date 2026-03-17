@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Ima
 import { theme } from '@/constants/theme';
 import { MaterialIcons } from '@expo/vector-icons';
 import OCRCamera from '../../components/OCRCamera';
+import i18n from '@/lib/i18n';
 
 // Dummy data for analytics history
 const initialAnalyticsHistory = [
@@ -44,19 +45,19 @@ const AnalyticsScreen = () => {
     <SafeAreaView style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Análisis de Laboratorio</Text>
+          <Text style={styles.headerTitle}>{i18n.t('analytics.title')}</Text>
         </View>
       <ScrollView>
         <View style={styles.mainContent}>
           {/* Scan Button */}
           <TouchableOpacity style={styles.scanButton} onPress={() => setShowCamera(true)}>
             <MaterialIcons name="camera-alt" size={32} color={theme.palette.white} />
-            <Text style={styles.scanButtonText}>Digitalizar nueva analítica</Text>
+            <Text style={styles.scanButtonText}>{i18n.t('analytics.scan_button')}</Text>
           </TouchableOpacity>
 
           {/* History Section */}
           <View style={styles.historySection}>
-            <Text style={styles.sectionTitle}>Historial de Analíticas</Text>
+            <Text style={styles.sectionTitle}>{i18n.t('analytics.history_title')}</Text>
             {analyticsHistory.length > 0 ? (
               <View style={styles.historyList}>
                 {analyticsHistory.map(item => (
@@ -73,8 +74,8 @@ const AnalyticsScreen = () => {
             ) : (
               <View style={styles.emptyState}>
                 <MaterialIcons name="folder-open" size={64} color="#e0e0e0" />
-                <Text style={styles.emptyStateText}>Aún no has digitalizado ninguna analítica.</Text>
-                <Text style={styles.emptyStateSubText}>Usa el botón superior para empezar.</Text>
+                <Text style={styles.emptyStateText}>{i18n.t('analytics.empty_state_text')}</Text>
+                <Text style={styles.emptyStateSubText}>{i18n.t('analytics.empty_state_subtext')}</Text>
               </View>
             )}
           </View>

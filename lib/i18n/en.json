@@ -39,6 +39,74 @@
     "analytics": "Analytics",
     "settings": "Settings"
   },
+  "new_patient": {
+    "title": "Add New Patient",
+    "form": {
+      "add_photo": "Add Photo",
+      "name": "Name",
+      "name_placeholder": "Enter full name",
+      "relation": "Relation",
+      "relation_placeholder": "Son, Mother, etc.",
+      "save": "Save Patient",
+      "validations": {
+        "name_required": "Please enter a name."
+      }
+    }
+  },
+  "patient_form": {
+    "new_title": "New Patient",
+    "edit_title": "Edit Patient",
+    "personalization": "Personalization",
+    "color_context": "Patient Color Context",
+    "full_name": "Full Name",
+    "age": "Age",
+    "relation": "Relation",
+    "notes": "General Notes",
+    "delete_patient": "Delete Patient"
+  },
+  "camera": {
+    "no_access": "No access to camera"
+  },
+  "auth": {
+    "sign_out": "Sign Out",
+    "sign_in": "Sign in with Google"
+  },
+  "analytics": {
+    "title": "Laboratory Analytics",
+    "scan_button": "Scan new analytics",
+    "history_title": "Analytics History",
+    "empty_state_text": "You haven't scanned any analytics yet.",
+    "empty_state_subtext": "Use the button above to start."
+  },
+  "biometrics": {
+    "title": "Biometric Measurements",
+    "placeholder_name": "Measurement Name",
+    "placeholder_value": "Value",
+    "placeholder_unit": "Unit",
+    "add_custom": "Add Custom Measurement"
+  },
+  "settings": {
+    "title": "Settings",
+    "sections": {
+      "general": "General",
+      "data": "Data Management",
+      "about": "About"
+    },
+    "rows": {
+      "language": "Language",
+      "dark_mode": "Dark Mode",
+      "notifications": "Notifications",
+      "sync_calendar": "Sync Calendar",
+      "export_data": "Export Data",
+      "import_data": "Import Data",
+      "help": "Help & Support",
+      "privacy": "Privacy Policy",
+      "about": "About CareSync"
+    },
+    "errors": {
+      "export_failed": "Could not export data."
+    }
+  },
   "medication": {
     "name": "Medication Name",
     "namePlaceholder": "e.g., Ibuprofen",
@@ -56,7 +124,8 @@
     "notesPlaceholder": "e.g., with food"
   },
   "common": {
-    "save": "Save"
+    "save": "Save",
+    "error": "Error"
   },
   "frequency": {
     "daily": "Daily",
