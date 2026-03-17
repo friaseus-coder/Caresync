@@ -1,0 +1,61 @@
+{
+  "greeting": "Hola!",
+  "introduction": "Soy tu asistente de cuidado personal.",
+  "dashboard": {
+    "title": "CareSync",
+    "welcome": "Hola, %{name}",
+    "welcome_back": "Bienvenida de nuevo a tu panel de salud",
+    "profile_aria_label": "Perfil de %{name}",
+    "add_profile": "Añadir perfil",
+    "quick_actions": {
+      "new_measurement": "Nueva Medición",
+      "add_medication": "Añadir Medica.",
+      "view_history": "Ver Historial"
+    },
+    "upcoming_intakes": {
+      "title": "Próximas Tomas",
+      "today": "Hoy, %{date}",
+      "status": {
+        "taken": "Tomado",
+        "pending": "Pendiente"
+      },
+      "dosage": {
+        "pill": "%{count} pastilla",
+        "pills": "%{count} pastillas",
+        "capsule": "%{count} cápsula",
+        "capsules": "%{count} cápsulas",
+        "amount": "%{value}mg"
+      }
+    }
+  },
+  "bottom_nav": {
+    "dashboard": "Dashboard",
+    "patients": "Pacientes",
+    "analytics": "Análisis",
+    "settings": "Ajustes"
+  },
+  "medication": {
+    "name": "Nombre del Medicamento",
+    "namePlaceholder": "p.ej., Ibuprofeno",
+    "dosage": "Dosis",
+    "dosagePlaceholder": "p.ej., 200mg",
+    "patientId": "ID del Paciente",
+    "patientIdPlaceholder": "Introduce el ID del paciente",
+    "intakeFrequency": "Frecuencia de Toma",
+    "intakeTimes": "Horas de Toma",
+    "intakeTimePlaceholder": "HH:MM",
+    "addIntakeTime": "Añadir Hora de Toma",
+    "selectStartDate": "Seleccionar Fecha de Inicio",
+    "selectEndDate": "Seleccionar Fecha de Fin",
+    "notes": "Notas",
+    "notesPlaceholder": "p.ej., con comida"
+  },
+  "common": {
+    "save": "Guardar"
+  },
+  "frequency": {
+    "daily": "Diariamente",
+    "weekly": "Semanalmente",
+    "asNeeded": "Cuando sea necesario"
+  }
+}

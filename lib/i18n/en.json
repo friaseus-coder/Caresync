@@ -1,0 +1,61 @@
+{
+  "greeting": "Hello!",
+  "introduction": "I am your personal care assistant.",
+  "dashboard": {
+    "title": "CareSync",
+    "welcome": "Hello, %{name}",
+    "welcome_back": "Welcome back to your health dashboard",
+    "profile_aria_label": "%{name}'s Profile",
+    "add_profile": "Add profile",
+    "quick_actions": {
+      "new_measurement": "New Measurement",
+      "add_medication": "Add Med.",
+      "view_history": "View History"
+    },
+    "upcoming_intakes": {
+      "title": "Upcoming Intakes",
+      "today": "Today, %{date}",
+      "status": {
+        "taken": "Taken",
+        "pending": "Pending"
+      },
+      "dosage": {
+        "pill": "%{count} pill",
+        "pills": "%{count} pills",
+        "capsule": "%{count} capsule",
+        "capsules": "%{count} capsules",
+        "amount": "%{value}mg"
+      }
+    }
+  },
+  "bottom_nav": {
+    "dashboard": "Dashboard",
+    "patients": "Patients",
+    "analytics": "Analytics",
+    "settings": "Settings"
+  },
+  "medication": {
+    "name": "Medication Name",
+    "namePlaceholder": "e.g., Ibuprofen",
+    "dosage": "Dosage",
+    "dosagePlaceholder": "e.g., 200mg",
+    "patientId": "Patient ID",
+    "patientIdPlaceholder": "Enter patient ID",
+    "intakeFrequency": "Intake Frequency",
+    "intakeTimes": "Intake Times",
+    "intakeTimePlaceholder": "HH:MM",
+    "addIntakeTime": "Add Intake Time",
+    "selectStartDate": "Select Start Date",
+    "selectEndDate": "Select End Date",
+    "notes": "Notes",
+    "notesPlaceholder": "e.g., with food"
+  },
+  "common": {
+    "save": "Save"
+  },
+  "frequency": {
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "asNeeded": "As Needed"
+  }
+}

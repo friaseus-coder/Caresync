@@ -1,0 +1,61 @@
+{
+  "greeting": "Hola!",
+  "introduction": "Sóc el teu assistent de cura personal.",
+  "dashboard": {
+    "title": "CareSync",
+    "welcome": "Hola, %{name}",
+    "welcome_back": "Benvinguda de nou al teu panell de salut",
+    "profile_aria_label": "Perfil de %{name}",
+    "add_profile": "Afegir perfil",
+    "quick_actions": {
+      "new_measurement": "Nova Medició",
+      "add_medication": "Afegir Medica.",
+      "view_history": "Veure Historial"
+    },
+    "upcoming_intakes": {
+      "title": "Properes Preses",
+      "today": "Avui, %{date}",
+      "status": {
+        "taken": "Presa",
+        "pending": "Pendent"
+      },
+      "dosage": {
+        "pill": "%{count} pastilla",
+        "pills": "%{count} pastilles",
+        "capsule": "%{count} càpsula",
+        "capsules": "%{count} càpsules",
+        "amount": "%{value}mg"
+      }
+    }
+  },
+  "bottom_nav": {
+    "dashboard": "Dashboard",
+    "patients": "Pacients",
+    "analytics": "Anàlisi",
+    "settings": "Ajustos"
+  },
+  "medication": {
+    "name": "Nom del Medicament",
+    "namePlaceholder": "p.ex., Ibuprofèn",
+    "dosage": "Dosi",
+    "dosagePlaceholder": "p.ex., 200mg",
+    "patientId": "ID del Pacient",
+    "patientIdPlaceholder": "Introdueix l'ID del pacient",
+    "intakeFrequency": "Freqüència de Presa",
+    "intakeTimes": "Hores de Presa",
+    "intakeTimePlaceholder": "HH:MM",
+    "addIntakeTime": "Afegir Hora de Presa",
+    "selectStartDate": "Seleccionar Data d'Inici",
+    "selectEndDate": "Seleccionar Data de Fi",
+    "notes": "Notes",
+    "notesPlaceholder": "p.ex., amb menjar"
+  },
+  "common": {
+    "save": "Guardar"
+  },
+  "frequency": {
+    "daily": "Diàriament",
+    "weekly": "Setmanalment",
+    "asNeeded": "Quan sigui necessari"
+  }
+}

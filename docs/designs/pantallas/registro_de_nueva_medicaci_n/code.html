@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>New Medication Intake Registration</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#89d0ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#121c20",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen font-display">
+<div class="max-w-md mx-auto bg-white dark:bg-slate-900 min-h-screen flex flex-col shadow-xl">
+<!-- Top App Bar -->
+<div class="flex items-center p-4 pb-2 justify-between border-b border-primary/10">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Add Medication</h2>
+</div>
+<!-- Progress Bar Section -->
+<div class="flex flex-col gap-3 p-4">
+<div class="flex gap-6 justify-between items-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold leading-normal">Step 1: Medicine Info</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">1 of 3</p>
+</div>
+<div class="rounded-full bg-primary/20 h-2 w-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-300" style="width: 33.33%;"></div>
+</div>
+</div>
+<!-- Main Form Container -->
+<div class="flex-1 overflow-y-auto px-4 py-2 space-y-6 pb-24">
+<!-- Step 1: Medicine Info -->
+<section class="space-y-4">
+<div class="flex flex-col">
+<label class="text-slate-900 dark:text-slate-100 text-sm font-semibold mb-2">Medicine Name</label>
+<input class="w-full h-14 rounded-xl border border-primary/20 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 px-4 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-slate-400" placeholder="e.g. Ibuprofen 400mg" type="text"/>
+</div>
+<div class="flex flex-col">
+<label class="text-slate-900 dark:text-slate-100 text-sm font-semibold mb-2">Photo Upload</label>
+<div class="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 px-6 py-10 cursor-pointer hover:bg-primary/10 transition-colors">
+<div class="size-14 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">photo_camera</span>
+</div>
+<div class="text-center">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold">Take or upload a photo</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1">Capture the medicine box or label</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Step 2: Schedule -->
+<section class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+<h3 class="text-slate-900 dark:text-slate-100 font-bold text-lg">Schedule</h3>
+<div class="flex flex-col">
+<label class="text-slate-900 dark:text-slate-100 text-sm font-semibold mb-2">Start Date</label>
+<div class="relative">
+<input class="w-full h-14 rounded-xl border border-primary/20 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 px-4 focus:ring-2 focus:ring-primary focus:border-transparent outline-none" type="date"/>
+</div>
+</div>
+<div class="flex flex-col">
+<label class="text-slate-900 dark:text-slate-100 text-sm font-semibold mb-2">Frequency</label>
+<select class="w-full h-14 rounded-xl border border-primary/20 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 px-4 focus:ring-2 focus:ring-primary focus:border-transparent outline-none appearance-none">
+<option value="8h">Every 8 hours</option>
+<option value="12h">Every 12 hours</option>
+<option value="daily">Daily</option>
+<option value="weekly">Weekly</option>
+<option value="custom">Custom Schedule</option>
+</select>
+</div>
+</section>
+<!-- Step 3: Integration & Notes -->
+<section class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center justify-between p-4 bg-primary/10 rounded-xl">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">calendar_month</span>
+<div>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold">Sync with Google Calendar</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Sincronizar con Google Calendar</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex flex-col">
+<label class="text-slate-900 dark:text-slate-100 text-sm font-semibold mb-2">Notes</label>
+<textarea class="w-full rounded-xl border border-primary/20 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-4 focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none placeholder:text-slate-400" placeholder="Take after food, avoid alcohol..." rows="3"></textarea>
+</div>
+</section>
+</div>
+<!-- Sticky Bottom Action -->
+<div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 sticky bottom-0">
+<button class="w-full h-14 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+<span>Save Medication</span>
+<span class="material-symbols-outlined">check_circle</span>
+</button>
+</div>
+</div>
+</body></html>
