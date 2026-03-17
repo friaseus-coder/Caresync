@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, TextInput, FlatList } from 'react-native';
-import { theme } from '../../constants/Theme';
+import { theme } from '@/constants/theme';
 import { MaterialIcons } from '@expo/vector-icons';
 
 // Dummy data for biometric measurements

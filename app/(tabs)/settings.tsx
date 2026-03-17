@@ -1,6 +1,6 @@
 
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Switch, Alert } from 'react-native';
-import { theme } from '../../constants/Theme';
+import { theme } from '@/constants/theme';
 import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import GoogleSignIn from '../../components/GoogleSignIn';

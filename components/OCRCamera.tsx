@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Camera } from 'expo-camera';
 import { MaterialIcons } from '@expo/vector-icons';
-import { theme } from '../constants/Theme';
+import { theme } from '@/constants/theme';
 
 const OCRCamera = ({ onTextRecognized }) => {
   const [hasPermission, setHasPermission] = useState(null);

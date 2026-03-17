@@ -26,6 +26,11 @@
         "capsules": "%{count} càpsules",
         "amount": "%{value}mg"
       }
+    },
+    "empty_state": {
+      "title": "No hi ha pacients encara",
+      "subtitle": "Afegeix el teu primer pacient per començar a gestionar la seva medicació.",
+      "add_patient": "Afegir Pacient"
     }
   },
   "bottom_nav": {

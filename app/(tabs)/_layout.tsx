@@ -2,7 +2,7 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
-import { theme } from '../../constants/Theme';
+import { theme } from '@/constants/theme';
 
 export default function TabLayout() {
   return (

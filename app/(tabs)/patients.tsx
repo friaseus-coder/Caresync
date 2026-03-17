@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import { usePatient } from '../../hooks/usePatient';
-import { theme } from '../../constants/Theme';
+import { theme } from '@/constants/theme';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 

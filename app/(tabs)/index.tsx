@@ -11,24 +11,24 @@ import { useEffect, useState } from 'react';
 
 // Placeholder Icon component
 const Icon = ({ name, size = 24, color = '#000' }: { name: string, size?: number, color?: string }) => (
-    <Text style={{ fontFamily: 'Material Symbols Outlined', fontSize: size, color, fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24" }}>{name}</Text>
+    <Text style={{ fontFamily: 'Material Symbols Outlined', fontSize: size, color }}>{name}</Text>
 );
 
-const quickActions = [
-    { icon: 'straighten', label: i18n.t('dashboard.quick_actions.new_measurement') },
-    { icon: 'medical_services', label: i18n.t('dashboard.quick_actions.add_medication') },
-    { icon: 'history', label: i18n.t('dashboard.quick_actions.view_history') },
+const getQuickActions = (t: (key: string) => string) => [
+    { icon: 'straighten', label: t('dashboard.quick_actions.new_measurement') },
+    { icon: 'medical_services', label: t('dashboard.quick_actions.add_medication') },
+    { icon: 'history', label: t('dashboard.quick_actions.view_history') },
 ];
 
 export default function HomeScreen() {
     const { patients } = usePatient();
     const { medications } = useMedication();
     const router = useRouter();
-    const [activePatient, setActivePatient] = useState(null);
+    const [activePatient, setActivePatient] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (patients.length > 0) {
+        if (patients.length > 0 && !activePatient) {
             setActivePatient(patients[0]);
         }
         setLoading(false);
@@ -87,7 +87,7 @@ export default function HomeScreen() {
                         <View style={styles.profileSelector}>
                             {patients.map(patient => (
                                 <TouchableOpacity key={patient.id} onPress={() => setActivePatient(patient)} style={activePatient?.id === patient.id ? styles.profileItemActive: styles.profileItemInactive}>
-                                    <Image source={{ uri: patient.profile_picture || 'https://via.placeholder.com/150' }} style={activePatient?.id === patient.id ? [styles.profileImage, {borderColor: tintColor}] : styles.profileImageInactive} />
+                                    <Image source={{ uri: patient.profile_pic_uri || 'https://via.placeholder.com/150' }} style={activePatient?.id === patient.id ? [styles.profileImage, {borderColor: tintColor}] : styles.profileImageInactive} />
                                     <ThemedText style={activePatient?.id === patient.id ? [styles.profileNameActive, {color: tintColor}] : styles.profileNameInactive}>{patient.name}</ThemedText>
                                 </TouchableOpacity>
                             ))}
@@ -98,7 +98,7 @@ export default function HomeScreen() {
                     </View>
 
                     <View style={styles.quickActions}>
-                        {quickActions.map((action, index) => (
+                        {getQuickActions(i18n.t.bind(i18n)).map((action, index) => (
                             <TouchableOpacity key={index} style={[styles.actionButton, {backgroundColor: cardBackgroundColor, borderColor: cardBorderColor}]}>
                                 <View style={[styles.actionIconContainer, {backgroundColor: 'rgba(137, 208, 236, 0.1)'}]}>
                                     <Icon name={action.icon} size={20} color={tintColor} />
@@ -114,26 +114,15 @@ export default function HomeScreen() {
                             <ThemedText style={[styles.intakesDate, {color: tintColor}]}>{i18n.t('dashboard.upcoming_intakes.today', { date: currentDate })}</ThemedText>
                         </View>
                         <View style={styles.intakesList}>
-                            {medications.filter(med => med.patient_id === activePatient?.id).map((intake, index) => (
-                                <View key={index} style={[styles.intakeCard, { opacity: intake.opacity ?? 1, backgroundColor: cardBackgroundColor, borderColor: cardBorderColor }]}>
-                                    <Image source={{ uri: intake.image || 'https://via.placeholder.com/150' }} style={styles.medicationImage} />
+                            {medications.filter(med => med.patient_id === activePatient?.id).map((medication, index) => (
+                                <View key={index} style={[styles.intakeCard, { backgroundColor: cardBackgroundColor, borderColor: cardBorderColor }]}>
                                     <View style={styles.medicationDetails}>
-                                        <ThemedText style={styles.medicationName}>{intake.name}</ThemedText>
+                                        <ThemedText style={styles.medicationName}>{medication.name}</ThemedText>
                                         <View style={styles.detailRow}>
                                             <Icon name="pill" size={12} color={iconColor} />
-                                            <ThemedText style={[styles.detailText, {color: iconColor}]}>{intake.dosage}</ThemedText>
-                                        </View>
-                                        <View style={styles.detailRow}>
-                                            <Icon name="schedule" size={12} color={intake.taken ? tintColor : iconColor} />
-                                            <ThemedText style={[styles.detailText, {color: iconColor}, intake.taken && [styles.timeTaken, {color: tintColor}]]}>{intake.time}</ThemedText>
+                                            <ThemedText style={[styles.detailText, {color: iconColor}]}>{medication.dosage}</ThemedText>
                                         </View>
                                     </View>
-                                    <TouchableOpacity style={[styles.statusButton, intake.taken ? [styles.statusButtonTaken, {backgroundColor: tintColor}] : [styles.statusButtonPending, {backgroundColor: 'rgba(137, 208, 236, 0.1)', borderColor: 'rgba(137, 208, 236, 0.2)'}]]}>
-                                        {intake.taken && <Icon name="check_circle" size={14} color={white} />}
-                                        <Text style={[styles.statusButtonText, intake.taken ? [styles.statusButtonTextTaken, {color: white}] : [styles.statusButtonTextPending, {color: tintColor}]]}>
-                                            {intake.status}
-                                        </Text>
-                                    </TouchableOpacity>
                                 </View>
                             ))}
                         </View>

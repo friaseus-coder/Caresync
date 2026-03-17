@@ -5,13 +5,19 @@ import es from './es.json';
 import ca from './ca.json';
 import en from './en.json';
 
-const i18n = new I18n({
-  es,
-  ca,
-  en,
-});
+const translations = {
+  es: es,
+  en: en,
+  ca: ca,
+};
 
-i18n.locale = Localization.locale;
+const i18n = new I18n(translations);
+
+// Set the locale once at start
+const locales = Localization.getLocales();
+const deviceLocale = locales && locales.length > 0 ? locales[0].languageCode : 'es';
+i18n.locale = deviceLocale || 'es';
 i18n.enableFallback = true;
+i18n.defaultLocale = 'es';
 
 export default i18n;
