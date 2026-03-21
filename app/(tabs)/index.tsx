@@ -42,7 +42,7 @@ export default function HomeScreen() {
     const cardBorderColor = useThemeColor({}, 'cardBorder');
     const white = useThemeColor({light: '#fff', dark: '#000'}, 'background');
     
-    const currentDate = new Date().toLocaleDateString(i18n.locale, { day: 'numeric', month: 'short' }).replace('.','');
+    const currentDate = new Date().toLocaleDateString(i18n.locale, { day: 'numeric', month: 'short' });
 
     if (loading) {
         return <ActivityIndicator style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}/>
@@ -114,17 +114,41 @@ export default function HomeScreen() {
                             <ThemedText style={[styles.intakesDate, {color: tintColor}]}>{i18n.t('dashboard.upcoming_intakes.today', { date: currentDate })}</ThemedText>
                         </View>
                         <View style={styles.intakesList}>
-                            {medications.filter(med => med.patient_id === activePatient?.id).map((medication, index) => (
+                            {medications.filter(med => med.patient_id === activePatient?.id).map((medication, index) => {
+                                // For the mockup, we will mock "Tomado" for the first and "Pendiente" for the rest
+                                const isTaken = index === 0;
+                                const statusKey = isTaken ? 'taken' : 'pending';
+                                
+                                return (
                                 <View key={index} style={[styles.intakeCard, { backgroundColor: cardBackgroundColor, borderColor: cardBorderColor }]}>
+                                    <View style={styles.medicationImage}>
+                                        {/* Placeholder for medication image until one is available */}
+                                    </View>
                                     <View style={styles.medicationDetails}>
                                         <ThemedText style={styles.medicationName}>{medication.name}</ThemedText>
                                         <View style={styles.detailRow}>
                                             <Icon name="pill" size={12} color={iconColor} />
                                             <ThemedText style={[styles.detailText, {color: iconColor}]}>{medication.dosage}</ThemedText>
                                         </View>
+                                        <View style={styles.detailRow}>
+                                            <Icon name="schedule" size={12} color={iconColor} />
+                                            <ThemedText style={[styles.detailText, {color: iconColor}]}>{medication.intake_times ? JSON.parse(medication.intake_times)[0] : '10:00 AM'}</ThemedText>
+                                        </View>
                                     </View>
+                                    <TouchableOpacity style={[
+                                        styles.statusButton, 
+                                        isTaken ? [styles.statusButtonTaken, {backgroundColor: tintColor}] : [styles.statusButtonPending, {borderColor: tintColor, backgroundColor: 'rgba(137, 208, 236, 0.1)'}]
+                                    ]}>
+                                        {isTaken && <Icon name="check_circle" size={16} color={white} />}
+                                        <Text style={[
+                                            styles.statusButtonText, 
+                                            isTaken ? [styles.statusButtonTextTaken, {color: white}] : [styles.statusButtonTextPending, {color: tintColor}]
+                                        ]}>
+                                            {i18n.t(`dashboard.upcoming_intakes.status.${statusKey}`)}
+                                        </Text>
+                                    </TouchableOpacity>
                                 </View>
-                            ))}
+                            )})}
                         </View>
                     </View>
                 </View>

@@ -54,6 +54,7 @@
     }
   },
   "patient_form": {
+    "profile_title": "Perfil del Paciente",
     "new_title": "Nuevo Paciente",
     "edit_title": "Editar Paciente",
     "personalization": "Personalización",
@@ -62,7 +63,31 @@
     "age": "Edad",
     "relation": "Parentesco",
     "notes": "Notas Generales",
-    "delete_patient": "Eliminar Paciente"
+    "delete_patient": "Eliminar Paciente",
+    "active_medications": "Medicamentos Activos",
+    "add": "Añadir"
+  },
+  "addMedication": {
+    "title": "Añadir Medicación",
+    "step1": "Paso 1: Info. del Medicamento",
+    "stepProgress": "%{step} de %{total}",
+    "medicineName": "Nombre del Medicamento",
+    "medicineNamePlaceholder": "p.ej. Ibuprofeno 400mg",
+    "photoUpload": "Subir Foto",
+    "takeOrUpload": "Tomar o subir una foto",
+    "captureBox": "Captura la caja o etiqueta del medicamento",
+    "schedule": "Horario",
+    "startDate": "Fecha de Inicio",
+    "frequency": "Frecuencia",
+    "every8h": "Cada 8 horas",
+    "every12h": "Cada 12 horas",
+    "daily": "Diariamente",
+    "weekly": "Semanalmente",
+    "customSchedule": "Horario Personalizado",
+    "syncCalendar": "Sincronizar con Google Calendar",
+    "notes": "Notas",
+    "notesPlaceholder": "Tomar después de comer, evitar alcohol...",
+    "saveMedication": "Guardar Medicación"
   },
   "camera": {
     "no_access": "Sin acceso a la cámara",

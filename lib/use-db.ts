@@ -13,7 +13,7 @@ export const useDB = () => {
     const setup = async () => {
       try {
         console.log("Opening database...");
-        const sqlite = await SQLite.openDatabaseAsync(DATABASE_NAME);
+        const sqlite = await SQLite.openDatabaseAsync(DATABASE_NAME, { useNewConnection: true });
         console.log("Database opened successfully.");
         
         // Manual schema creation if not using migrations yet

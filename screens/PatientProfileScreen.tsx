@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, TextInput } from 'react-native';
 import { theme } from '@/constants/theme';
 import { MaterialIcons } from '@expo/vector-icons';
+import i18n from '@/lib/i18n';
 
 const medications = [
   {
@@ -30,7 +31,7 @@ const PatientProfileScreen = () => {
           <TouchableOpacity>
             <MaterialIcons name="arrow-back" size={24} color={theme.palette.black} />
           </TouchableOpacity>
-          <Text style={styles.appBarTitle}>Patient Profile</Text>
+          <Text style={styles.appBarTitle}>{i18n.t('patient_form.profile_title')}</Text>
           <TouchableOpacity>
             <MaterialIcons name="check" size={24} color={theme.palette.primary} />
           </TouchableOpacity>
@@ -54,8 +55,8 @@ const PatientProfileScreen = () => {
         <View style={styles.mainContent}>
             {/* Personalization */}
             <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Personalization</Text>
-                <Text style={styles.sectionSubtitle}>Patient Color Context</Text>
+                <Text style={styles.sectionTitle}>{i18n.t('patient_form.personalization')}</Text>
+                <Text style={styles.sectionSubtitle}>{i18n.t('patient_form.color_context')}</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.colorPickerContainer}>
                 {colors.map((color) => (
                     <TouchableOpacity 
@@ -70,21 +71,21 @@ const PatientProfileScreen = () => {
             {/* Information Fields */}
             <View style={styles.section}>
                 <View style={styles.infoField}>
-                    <Text style={styles.infoLabel}>Full Name</Text>
+                    <Text style={styles.infoLabel}>{i18n.t('patient_form.full_name')}</Text>
                     <TextInput style={styles.infoInput} value="María" />
                 </View>
                 <View style={styles.infoRow}>
                     <View style={[styles.infoField, { flex: 1 }]}>
-                        <Text style={styles.infoLabel}>Age</Text>
+                        <Text style={styles.infoLabel}>{i18n.t('patient_form.age')}</Text>
                         <TextInput style={styles.infoInput} value="72" />
                     </View>
                     <View style={[styles.infoField, { flex: 1 }]}>
-                        <Text style={styles.infoLabel}>Relation</Text>
+                        <Text style={styles.infoLabel}>{i18n.t('patient_form.relation')}</Text>
                         <TextInput style={styles.infoInput} value="Madre" />
                     </View>
                 </View>
                  <View style={styles.infoField}>
-                    <Text style={styles.infoLabel}>General Notes</Text>
+                    <Text style={styles.infoLabel}>{i18n.t('patient_form.notes')}</Text>
                     <View style={styles.notesInputContainer}>
                         <MaterialIcons name="warning" size={16} color={theme.palette.primary} style={{marginTop: 2}}/>
                         <TextInput style={styles.notesInput} value="Alérgica a la penicilina" multiline />
@@ -95,10 +96,10 @@ const PatientProfileScreen = () => {
             {/* Active Medications */}
             <View style={styles.section}>
                  <View style={styles.medicationHeader}>
-                    <Text style={styles.sectionTitle}>Active Medications</Text>
+                    <Text style={styles.sectionTitle}>{i18n.t('patient_form.active_medications')}</Text>
                     <TouchableOpacity style={styles.addButton}>
                         <MaterialIcons name="add-circle" size={18} color={theme.palette.primary} />
-                        <Text style={styles.addButtonLabel}>Add</Text>
+                        <Text style={styles.addButtonLabel}>{i18n.t('patient_form.add')}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.medicationsContainer}>

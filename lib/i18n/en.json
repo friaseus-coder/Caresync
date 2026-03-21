@@ -54,6 +54,7 @@
     }
   },
   "patient_form": {
+    "profile_title": "Patient Profile",
     "new_title": "New Patient",
     "edit_title": "Edit Patient",
     "personalization": "Personalization",
@@ -62,7 +63,31 @@
     "age": "Age",
     "relation": "Relation",
     "notes": "General Notes",
-    "delete_patient": "Delete Patient"
+    "delete_patient": "Delete Patient",
+    "active_medications": "Active Medications",
+    "add": "Add"
+  },
+  "addMedication": {
+    "title": "Add Medication",
+    "step1": "Step 1: Medicine Info",
+    "stepProgress": "%{step} of %{total}",
+    "medicineName": "Medicine Name",
+    "medicineNamePlaceholder": "e.g. Ibuprofen 400mg",
+    "photoUpload": "Photo Upload",
+    "takeOrUpload": "Take or upload a photo",
+    "captureBox": "Capture the medicine box or label",
+    "schedule": "Schedule",
+    "startDate": "Start Date",
+    "frequency": "Frequency",
+    "every8h": "Every 8 hours",
+    "every12h": "Every 12 hours",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "customSchedule": "Custom Schedule",
+    "syncCalendar": "Sync with Google Calendar",
+    "notes": "Notes",
+    "notesPlaceholder": "Take after food, avoid alcohol...",
+    "saveMedication": "Save Medication"
   },
   "camera": {
     "no_access": "No access to camera",

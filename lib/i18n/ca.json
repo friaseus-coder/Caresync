@@ -54,6 +54,7 @@
     }
   },
   "patient_form": {
+    "profile_title": "Perfil del Pacient",
     "new_title": "Nou Pacient",
     "edit_title": "Editar Pacient",
     "personalization": "Personalització",
@@ -62,7 +63,31 @@
     "age": "Edat",
     "relation": "Parentiu",
     "notes": "Notes Generals",
-    "delete_patient": "Eliminar Pacient"
+    "delete_patient": "Eliminar Pacient",
+    "active_medications": "Medicaments Actius",
+    "add": "Afegir"
+  },
+  "addMedication": {
+    "title": "Afegir Medicació",
+    "step1": "Pas 1: Info. del Medicament",
+    "stepProgress": "%{step} de %{total}",
+    "medicineName": "Nom del Medicament",
+    "medicineNamePlaceholder": "p.ex. Ibuprofèn 400mg",
+    "photoUpload": "Pujar Foto",
+    "takeOrUpload": "Fer o pujar una foto",
+    "captureBox": "Captura la capsa o etiqueta del medicament",
+    "schedule": "Horari",
+    "startDate": "Data d'Inici",
+    "frequency": "Freqüència",
+    "every8h": "Cada 8 hores",
+    "every12h": "Cada 12 hores",
+    "daily": "Diàriament",
+    "weekly": "Setmanalment",
+    "customSchedule": "Horari Personalitzat",
+    "syncCalendar": "Sincronitzar amb Google Calendar",
+    "notes": "Notes",
+    "notesPlaceholder": "Prendre després de menjar, evitar alcohol...",
+    "saveMedication": "Desar Medicació"
   },
   "camera": {
     "no_access": "Sense accés a la càmera",
