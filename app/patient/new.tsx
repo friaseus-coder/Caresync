@@ -1,10 +1,11 @@
 
 import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/lib/i18n';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 import { usePatient } from '@/hooks/usePatient';
 import { useRouter } from 'expo-router';
 
@@ -26,7 +27,7 @@ export default function NewPatientScreen() {
     const white = useThemeColor({light: '#fff', dark: '#000'}, 'background');
 
     const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
+        const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [1, 1],
@@ -34,7 +35,20 @@ export default function NewPatientScreen() {
         });
 
         if (!result.canceled) {
-            setProfilePicUri(result.assets[0].uri);
+            const sourceUri = result.assets[0].uri;
+            const filename = `patient_${Date.now()}.jpg`;
+            const destUri = FileSystem.documentDirectory + filename;
+
+            try {
+                await FileSystem.copyAsync({
+                    from: sourceUri,
+                    to: destUri
+                });
+                setProfilePicUri(destUri);
+            } catch (error) {
+                console.error('Error al guardar la imagen:', error);
+                alert(i18n.t('new_patient.form.errors.save_photo') || 'Error al guardar la imagen de perfil.');
+            }
         }
     };
 
@@ -49,47 +63,52 @@ export default function NewPatientScreen() {
 
     return (
         <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
-            <ScrollView contentContainerStyle={styles.container}>
-                <ThemedText type="title" style={styles.title}>{i18n.t('new_patient.title')}</ThemedText>
+            <KeyboardAvoidingView 
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+                style={{ flex: 1 }}
+            >
+                <ScrollView contentContainerStyle={[styles.container, { flexGrow: 1 }]}>
+                    <ThemedText type="title" style={styles.title}>{i18n.t('new_patient.title')}</ThemedText>
 
-                <View style={[styles.card, { backgroundColor: cardBackgroundColor }]}>
-                    <TouchableOpacity onPress={pickImage} style={styles.profilePicContainer}>
-                        {profilePicUri ? (
-                            <Image source={{ uri: profilePicUri }} style={styles.profilePic} />
-                        ) : (
-                            <View style={styles.profilePicPlaceholder}>
-                                <Icon name="add_a_photo" size={48} color={textColor} />
-                                <ThemedText>{i18n.t('new_patient.form.add_photo')}</ThemedText>
-                            </View>
-                        )}
+                    <View style={[styles.card, { backgroundColor: cardBackgroundColor }]}>
+                        <TouchableOpacity onPress={pickImage} style={styles.profilePicContainer}>
+                            {profilePicUri ? (
+                                <Image source={{ uri: profilePicUri }} style={styles.profilePic} />
+                            ) : (
+                                <View style={styles.profilePicPlaceholder}>
+                                    <Icon name="add_a_photo" size={48} color={textColor} />
+                                    <ThemedText>{i18n.t('new_patient.form.add_photo')}</ThemedText>
+                                </View>
+                            )}
+                        </TouchableOpacity>
+
+                        <View style={styles.inputGroup}>
+                            <ThemedText>{i18n.t('new_patient.form.name')}</ThemedText>
+                            <TextInput
+                                style={[styles.input, { color: textColor, borderColor: tintColor }]}
+                                value={name}
+                                onChangeText={setName}
+                                placeholder={i18n.t('new_patient.form.name_placeholder')}
+                            />
+                        </View>
+
+                        <View style={styles.inputGroup}>
+                            <ThemedText>{i18n.t('new_patient.form.relation')}</ThemedText>
+                            <TextInput
+                                style={[styles.input, { color: textColor, borderColor: tintColor }]}
+                                value={relation}
+                                onChangeText={setRelation}
+                                placeholder={i18n.t('new_patient.form.relation_placeholder')}
+                            />
+                        </View>
+                    </View>
+
+                    <TouchableOpacity onPress={handleSave} style={[styles.saveButton, { backgroundColor: tintColor }]}>
+                        <Icon name="save" size={24} color={white} />
+                        <Text style={[styles.saveButtonText, {color: white}]}>{i18n.t('new_patient.form.save')}</Text>
                     </TouchableOpacity>
-
-                    <View style={styles.inputGroup}>
-                        <ThemedText>{i18n.t('new_patient.form.name')}</ThemedText>
-                        <TextInput
-                            style={[styles.input, { color: textColor, borderColor: tintColor }]}
-                            value={name}
-                            onChangeText={setName}
-                            placeholder={i18n.t('new_patient.form.name_placeholder')}
-                        />
-                    </View>
-
-                    <View style={styles.inputGroup}>
-                        <ThemedText>{i18n.t('new_patient.form.relation')}</ThemedText>
-                        <TextInput
-                            style={[styles.input, { color: textColor, borderColor: tintColor }]}
-                            value={relation}
-                            onChangeText={setRelation}
-                            placeholder={i18n.t('new_patient.form.relation_placeholder')}
-                        />
-                    </View>
-                </View>
-
-                <TouchableOpacity onPress={handleSave} style={[styles.saveButton, { backgroundColor: tintColor }]}>
-                    <Icon name="save" size={24} color={white} />
-                    <Text style={[styles.saveButtonText, {color: white}]}>{i18n.t('new_patient.form.save')}</Text>
-                </TouchableOpacity>
-            </ScrollView>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }

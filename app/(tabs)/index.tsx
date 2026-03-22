@@ -132,7 +132,7 @@ export default function HomeScreen() {
                                         </View>
                                         <View style={styles.detailRow}>
                                             <Icon name="schedule" size={12} color={iconColor} />
-                                            <ThemedText style={[styles.detailText, {color: iconColor}]}>{medication.intake_times ? JSON.parse(medication.intake_times)[0] : '10:00 AM'}</ThemedText>
+                                            <ThemedText style={[styles.detailText, {color: iconColor}]}>{medication.intake_times ? JSON.parse(medication.intake_times)[0] : i18n.t('dashboard.upcoming_intakes.default_time')}</ThemedText>
                                         </View>
                                     </View>
                                     <TouchableOpacity style={[

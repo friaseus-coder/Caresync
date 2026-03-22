@@ -25,7 +25,8 @@
         "capsule": "%{count} cápsula",
         "capsules": "%{count} cápsulas",
         "amount": "%{value}mg"
-      }
+      },
+      "default_time": "10:00 AM"
     },
     "empty_state": {
       "title": "No hay pacientes aún",
@@ -105,7 +106,16 @@
     "empty_state_subtext": "Usa el botón superior para empezar.",
     "ocr_no_text_alert": "No se detectó suficiente texto. Asegúrate de que el documento esté bien iluminado.",
     "ocr_live_results": "Detectando texto en tiempo real...",
-    "ocr_confirm_button": "Confirmar Texto Detectado"
+    "ocr_confirm_button": "Confirmar Texto Detectado",
+    "ocr_error_alert": "Error al procesar la imagen",
+    "ocr_retake": "Reintentar",
+    "ocr_aim_hint": "Apunta al documento con texto",
+    "ocr_processing": "Procesando...",
+    "default_title": "Analítica",
+    "glucose": "Glucosa",
+    "cholesterol": "Colesterol",
+    "triglycerides": "Triglicéridos",
+    "iron": "Hierro"
   },
   "biometrics": {
     "title": "Mediciones Biométricas",
@@ -117,7 +127,18 @@
     "height": "Altura",
     "blood_pressure": "Presión Arterial",
     "blood_glucose": "Glucosa",
-    "save_measurement": "Guardar Medición"
+    "save_measurement": "Guardar Medición",
+    "units": {
+      "kg": "kg",
+      "cm": "cm",
+      "mgdl": "mg/dL"
+    },
+    "placeholders": {
+      "weight": "0.0",
+      "height": "0",
+      "pressure": "120/80",
+      "glucose": "0"
+    }
   },
   "settings": {
     "title": "Ajustes",

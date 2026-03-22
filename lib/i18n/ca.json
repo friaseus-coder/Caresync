@@ -25,7 +25,8 @@
         "capsule": "%{count} càpsula",
         "capsules": "%{count} càpsules",
         "amount": "%{value}mg"
-      }
+      },
+      "default_time": "10:00 AM"
     },
     "empty_state": {
       "title": "No hi ha pacients encara",
@@ -121,7 +122,16 @@
     "empty_state_subtext": "Utilitza el botó superior per començar.",
     "ocr_no_text_alert": "No s'ha detectat prou text. Assegura't que el document estigui ben il·luminat.",
     "ocr_live_results": "Detectant text en temps real...",
-    "ocr_confirm_button": "Confirmar Text Detectat"
+    "ocr_confirm_button": "Confirmar Text Detectat",
+    "ocr_error_alert": "Error en processar la imatge",
+    "ocr_retake": "Reintentar",
+    "ocr_aim_hint": "Apunta al document amb text",
+    "ocr_processing": "Processant...",
+    "default_title": "Anàlisi",
+    "glucose": "Glucosa",
+    "cholesterol": "Colesterol",
+    "triglycerides": "Triglicèrids",
+    "iron": "Ferro"
   },
   "biometrics": {
     "title": "Mesuraments Biomètrics",
@@ -133,7 +143,18 @@
     "height": "Alçada",
     "blood_pressure": "Pressió Arterial",
     "blood_glucose": "Glucosa",
-    "save_measurement": "Guardar Mesurament"
+    "save_measurement": "Guardar Mesurament",
+    "units": {
+      "kg": "kg",
+      "cm": "cm",
+      "mgdl": "mg/dL"
+    },
+    "placeholders": {
+      "weight": "0.0",
+      "height": "0",
+      "pressure": "120/80",
+      "glucose": "0"
+    }
   },
   "settings": {
     "title": "Ajustos",

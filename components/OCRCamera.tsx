@@ -58,7 +58,7 @@ const OCRCamera: React.FC<OCRCameraProps> = ({ onTextRecognized }) => {
       }
     } catch (error) {
       console.error('Error durante el OCR:', error);
-      Alert.alert(i18n.t('analytics.ocr_error_alert') ?? 'Error al procesar la imagen');
+      Alert.alert(i18n.t('analytics.ocr_error_alert'));
     } finally {
       setIsProcessing(false);
     }
@@ -116,7 +116,7 @@ const OCRCamera: React.FC<OCRCameraProps> = ({ onTextRecognized }) => {
             <TouchableOpacity style={styles.retakeButton} onPress={retakePhoto}>
               <MaterialIcons name="refresh" size={22} color={theme.palette.primary} />
               <Text style={styles.retakeButtonText}>
-                {i18n.t('analytics.ocr_retake') ?? 'Reintentar'}
+                {i18n.t('analytics.ocr_retake')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.confirmButton} onPress={confirmText}>
@@ -142,25 +142,42 @@ const OCRCamera: React.FC<OCRCameraProps> = ({ onTextRecognized }) => {
         photo={true}
       />
       <View style={styles.overlay}>
-        <Text style={styles.hint}>
-          {i18n.t('analytics.ocr_aim_hint') ?? 'Apunta al documento con texto'}
-        </Text>
-        <TouchableOpacity
-          style={[styles.captureButton, isProcessing && styles.captureButtonDisabled]}
-          onPress={captureAndRecognize}
-          disabled={isProcessing}
-        >
-          {isProcessing ? (
-            <ActivityIndicator color={theme.palette.white} />
-          ) : (
-            <MaterialIcons name="camera-alt" size={32} color={theme.palette.white} />
-          )}
-        </TouchableOpacity>
-        {isProcessing && (
-          <Text style={styles.processingText}>
-            {i18n.t('analytics.ocr_processing') ?? 'Procesando...'}
-          </Text>
-        )}
+        {/* Máscara superior */}
+        <View style={styles.maskSide} />
+        
+        <View style={styles.maskCenterRow}>
+            <View style={styles.maskSide} />
+            <View style={styles.focusFrame}>
+                <View style={[styles.corner, styles.topLeft]} />
+                <View style={[styles.corner, styles.topRight]} />
+                <View style={[styles.corner, styles.bottomLeft]} />
+                <View style={[styles.corner, styles.bottomRight]} />
+            </View>
+            <View style={styles.maskSide} />
+        </View>
+
+        {/* Máscara inferior con controles */}
+        <View style={styles.maskBottom}>
+            <Text style={styles.hint}>
+                {i18n.t('analytics.ocr_aim_hint')}
+            </Text>
+            <TouchableOpacity
+                style={[styles.captureButton, isProcessing && styles.captureButtonDisabled]}
+                onPress={captureAndRecognize}
+                disabled={isProcessing}
+            >
+                {isProcessing ? (
+                    <ActivityIndicator color={theme.palette.white} />
+                ) : (
+                    <MaterialIcons name="camera-alt" size={32} color={theme.palette.white} />
+                )}
+            </TouchableOpacity>
+            {isProcessing && (
+                <Text style={styles.processingText}>
+                    {i18n.t('analytics.ocr_processing')}
+                </Text>
+            )}
+        </View>
       </View>
     </View>
   );
@@ -188,19 +205,65 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
   },
   overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'transparent',
+  },
+  maskSide: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+  },
+  maskCenterRow: {
+    flexDirection: 'row',
+    height: 200,
+  },
+  focusFrame: {
+    width: 280,
+    height: 200,
+    backgroundColor: 'transparent',
+    position: 'relative',
+  },
+  maskBottom: {
+    flex: 2,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    alignItems: 'center',
+    paddingTop: 20,
+    gap: 16,
+  },
+  corner: {
     position: 'absolute',
+    width: 20,
+    height: 20,
+    borderColor: theme.palette.primary,
+  },
+  topLeft: {
+    top: 0,
+    left: 0,
+    borderTopWidth: 4,
+    borderLeftWidth: 4,
+  },
+  topRight: {
+    top: 0,
+    right: 0,
+    borderTopWidth: 4,
+    borderRightWidth: 4,
+  },
+  bottomLeft: {
     bottom: 0,
     left: 0,
+    borderBottomWidth: 4,
+    borderLeftWidth: 4,
+  },
+  bottomRight: {
+    bottom: 0,
     right: 0,
-    padding: theme.spacing.spacingLarge,
-    backgroundColor: 'rgba(0,0,0,0.55)',
-    alignItems: 'center',
-    gap: 12,
+    borderBottomWidth: 4,
+    borderRightWidth: 4,
   },
   hint: {
-    color: '#ddd',
+    color: '#fff',
     fontSize: 14,
     textAlign: 'center',
+    marginBottom: 8,
   },
   captureButton: {
     backgroundColor: theme.palette.primary,

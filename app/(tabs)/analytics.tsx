@@ -10,14 +10,14 @@ import i18n from '@/lib/i18n';
 const initialAnalyticsHistory = [
   {
     id: '1',
-    title: 'Analítica - 15/05/2024',
-    snippet: 'Glucosa: 98 mg/dL, Colesterol: 190 mg/dL...',
+    title: `${i18n.t('analytics.default_title')} - 15/05/2024`,
+    snippet: `${i18n.t('analytics.glucose')}: 98 mg/dL, ${i18n.t('analytics.cholesterol')}: 190 mg/dL...`,
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Medical_record_form.svg/1024px-Medical_record_form.svg.png'
   },
   {
     id: '2',
-    title: 'Analítica - 10/01/2024',
-    snippet: 'Triglicéridos: 150 mg/dL, Hierro: 80 mcg/dL...',
+    title: `${i18n.t('analytics.default_title')} - 10/01/2024`,
+    snippet: `${i18n.t('analytics.triglycerides')}: 150 mg/dL, ${i18n.t('analytics.iron')}: 80 mcg/dL...`,
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Medical_record_form.svg/1024px-Medical_record_form.svg.png'
   },
 ];
@@ -30,7 +30,7 @@ const AnalyticsScreen = () => {
     setShowCamera(false);
     const newAnalysis = {
         id: Date.now().toString(),
-        title: `Analítica - ${new Date().toLocaleDateString()}`,
+        title: `${i18n.t('analytics.default_title')} - ${new Date().toLocaleDateString()}`,
         snippet: text.split('\n').join(', '),
         image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Medical_record_form.svg/1024px-Medical_record_form.svg.png'
     };

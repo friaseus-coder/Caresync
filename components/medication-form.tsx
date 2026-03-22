@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Switch, Platform } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Switch, Platform, KeyboardAvoidingView, Alert } from 'react-native';
 import i18n from '../lib/i18n';
 import { useMedication } from '../lib/useMedication';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { MaterialIcons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
+import { useRouter } from 'expo-router';
 
 const MedicationForm = () => {
   const t = i18n.t.bind(i18n);
@@ -16,8 +18,9 @@ const MedicationForm = () => {
   
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const { addMedication } = useMedication();
+  const router = useRouter();
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const newMedication = {
         patient_id: 1, 
         name: medicationName,
@@ -28,7 +31,24 @@ const MedicationForm = () => {
         end_date: startDate.toISOString(),
         notes: notes
     };
-    addMedication(newMedication);
+    
+    await addMedication(newMedication);
+    
+    // Feedback táctil
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    
+    // Alert de éxito
+    Alert.alert(
+      t('addMedication.success_title') || 'Éxito',
+      t('addMedication.success_message') || 'La medicación se ha guardado correctamente.',
+      [
+        {
+          text: 'OK',
+          onPress: () => router.back(),
+        },
+      ]
+    );
+
     // Reset form
     setMedicationName('');
     setFrequency('8h');
@@ -37,123 +57,128 @@ const MedicationForm = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Progress Bar Section */}
-      <View style={styles.progressSection}>
-          <View style={styles.progressHeader}>
-              <Text style={styles.stepTitle}>{t('addMedication.step1')}</Text>
-              <Text style={styles.stepCount}>{t('addMedication.stepProgress', { step: 1, total: 3 })}</Text>
-          </View>
-          <View style={styles.progressBarBg}>
-              <View style={styles.progressBarFill} />
-          </View>
-      </View>
+    <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+        style={{ flex: 1 }}
+    >
+        <View style={styles.container}>
+        {/* Progress Bar Section */}
+        <View style={styles.progressSection}>
+            <View style={styles.progressHeader}>
+                <Text style={styles.stepTitle}>{t('addMedication.step1')}</Text>
+                <Text style={styles.stepCount}>{t('addMedication.stepProgress', { step: 1, total: 3 })}</Text>
+            </View>
+            <View style={styles.progressBarBg}>
+                <View style={styles.progressBarFill} />
+            </View>
+        </View>
 
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-          {/* Step 1: Medicine Info */}
-          <View style={styles.section}>
-              <View style={styles.inputGroup}>
-                  <Text style={styles.label}>{t('addMedication.medicineName')}</Text>
-                  <TextInput
-                      style={styles.input}
-                      placeholder={t('addMedication.medicineNamePlaceholder')}
-                      placeholderTextColor="#9ca3af"
-                      value={medicationName}
-                      onChangeText={setMedicationName}
-                  />
-              </View>
+        <ScrollView style={styles.scrollView} contentContainerStyle={[styles.scrollContent, { flexGrow: 1 }]}>
+            {/* Step 1: Medicine Info */}
+            <View style={styles.section}>
+                <View style={styles.inputGroup}>
+                    <Text style={styles.label}>{t('addMedication.medicineName')}</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={t('addMedication.medicineNamePlaceholder')}
+                        placeholderTextColor="#9ca3af"
+                        value={medicationName}
+                        onChangeText={setMedicationName}
+                    />
+                </View>
 
-              <View style={styles.inputGroup}>
-                  <Text style={styles.label}>{t('addMedication.photoUpload')}</Text>
-                  <TouchableOpacity style={styles.photoUploadContainer}>
-                      <View style={styles.cameraIconContainer}>
-                          <MaterialIcons name="photo-camera" size={28} color="#89d0ec" />
-                      </View>
-                      <Text style={styles.uploadTitle}>{t('addMedication.takeOrUpload')}</Text>
-                      <Text style={styles.uploadSubtitle}>{t('addMedication.captureBox')}</Text>
-                  </TouchableOpacity>
-              </View>
-          </View>
+                <View style={styles.inputGroup}>
+                    <Text style={styles.label}>{t('addMedication.photoUpload')}</Text>
+                    <TouchableOpacity style={styles.photoUploadContainer}>
+                        <View style={styles.cameraIconContainer}>
+                            <MaterialIcons name="photo-camera" size={28} color="#89d0ec" />
+                        </View>
+                        <Text style={styles.uploadTitle}>{t('addMedication.takeOrUpload')}</Text>
+                        <Text style={styles.uploadSubtitle}>{t('addMedication.captureBox')}</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
 
-          {/* Step 2: Schedule */}
-          <View style={[styles.section, styles.borderTop]}>
-              <Text style={styles.sectionTitle}>{t('addMedication.schedule')}</Text>
-              
-              <View style={styles.inputGroup}>
-                  <Text style={styles.label}>{t('addMedication.startDate')}</Text>
-                  <TouchableOpacity style={styles.input} onPress={() => setShowStartDatePicker(true)}>
-                      <Text style={styles.inputText}>{startDate.toLocaleDateString()}</Text>
-                  </TouchableOpacity>
-                  {showStartDatePicker && (
-                      <DateTimePicker
-                          value={startDate}
-                          mode="date"
-                          display="default"
-                          onChange={(event, selectedDate) => {
-                              setShowStartDatePicker(Platform.OS === 'ios');
-                              if (selectedDate) setStartDate(selectedDate);
-                          }}
-                      />
-                  )}
-              </View>
+            {/* Step 2: Schedule */}
+            <View style={[styles.section, styles.borderTop]}>
+                <Text style={styles.sectionTitle}>{t('addMedication.schedule')}</Text>
+                
+                <View style={styles.inputGroup}>
+                    <Text style={styles.label}>{t('addMedication.startDate')}</Text>
+                    <TouchableOpacity style={styles.input} onPress={() => setShowStartDatePicker(true)}>
+                        <Text style={styles.inputText}>{startDate.toLocaleDateString()}</Text>
+                    </TouchableOpacity>
+                    {showStartDatePicker && (
+                        <DateTimePicker
+                            value={startDate}
+                            mode="date"
+                            display="default"
+                            onChange={(event, selectedDate) => {
+                                setShowStartDatePicker(Platform.OS === 'ios');
+                                if (selectedDate) setStartDate(selectedDate);
+                            }}
+                        />
+                    )}
+                </View>
 
-              <View style={styles.inputGroup}>
-                  <Text style={styles.label}>{t('addMedication.frequency')}</Text>
-                  <View style={styles.pickerContainer}>
-                      <Picker
-                          selectedValue={frequency}
-                          onValueChange={(itemValue) => setFrequency(itemValue)}
-                          style={styles.picker}
-                      >
-                          <Picker.Item label={t('addMedication.every8h')} value="8h" />
-                          <Picker.Item label={t('addMedication.every12h')} value="12h" />
-                          <Picker.Item label={t('addMedication.daily')} value="daily" />
-                          <Picker.Item label={t('addMedication.weekly')} value="weekly" />
-                          <Picker.Item label={t('addMedication.customSchedule')} value="custom" />
-                      </Picker>
-                  </View>
-              </View>
-          </View>
+                <View style={styles.inputGroup}>
+                    <Text style={styles.label}>{t('addMedication.frequency')}</Text>
+                    <View style={styles.pickerContainer}>
+                        <Picker
+                            selectedValue={frequency}
+                            onValueChange={(itemValue) => setFrequency(itemValue)}
+                            style={styles.picker}
+                        >
+                            <Picker.Item label={t('addMedication.every8h')} value="8h" />
+                            <Picker.Item label={t('addMedication.every12h')} value="12h" />
+                            <Picker.Item label={t('addMedication.daily')} value="daily" />
+                            <Picker.Item label={t('addMedication.weekly')} value="weekly" />
+                            <Picker.Item label={t('addMedication.customSchedule')} value="custom" />
+                        </Picker>
+                    </View>
+                </View>
+            </View>
 
-          {/* Step 3: Integration & Notes */}
-          <View style={[styles.section, styles.borderTop]}>
-              <View style={styles.syncCard}>
-                  <View style={styles.syncCardLeft}>
-                      <MaterialIcons name="calendar-month" size={24} color="#89d0ec" />
-                      <View style={styles.syncCardText}>
-                          <Text style={styles.syncTitle}>{t('addMedication.syncCalendar')}</Text>
-                      </View>
-                  </View>
-                  <Switch
-                      trackColor={{ false: "#cbd5e1", true: "#89d0ec" }}
-                      thumbColor="#ffffff"
-                      onValueChange={setSyncCalendar}
-                      value={syncCalendar}
-                  />
-              </View>
+            {/* Step 3: Integration & Notes */}
+            <View style={[styles.section, styles.borderTop]}>
+                <View style={styles.syncCard}>
+                    <View style={styles.syncCardLeft}>
+                        <MaterialIcons name="calendar-month" size={24} color="#89d0ec" />
+                        <View style={styles.syncCardText}>
+                            <Text style={styles.syncTitle}>{t('addMedication.syncCalendar')}</Text>
+                        </View>
+                    </View>
+                    <Switch
+                        trackColor={{ false: "#cbd5e1", true: "#89d0ec" }}
+                        thumbColor="#ffffff"
+                        onValueChange={setSyncCalendar}
+                        value={syncCalendar}
+                    />
+                </View>
 
-              <View style={styles.inputGroup}>
-                  <Text style={styles.label}>{t('addMedication.notes')}</Text>
-                  <TextInput
-                      style={[styles.input, styles.textArea]}
-                      placeholder={t('addMedication.notesPlaceholder')}
-                      placeholderTextColor="#9ca3af"
-                      multiline
-                      numberOfLines={3}
-                      value={notes}
-                      onChangeText={setNotes}
-                  />
-              </View>
-          </View>
-      </ScrollView>
+                <View style={styles.inputGroup}>
+                    <Text style={styles.label}>{t('addMedication.notes')}</Text>
+                    <TextInput
+                        style={[styles.input, styles.textArea]}
+                        placeholder={t('addMedication.notesPlaceholder')}
+                        placeholderTextColor="#9ca3af"
+                        multiline
+                        numberOfLines={3}
+                        value={notes}
+                        onChangeText={setNotes}
+                    />
+                </View>
+            </View>
+        </ScrollView>
 
-      <View style={styles.footer}>
-          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-              <Text style={styles.saveButtonText}>{t('addMedication.saveMedication')}</Text>
-              <MaterialIcons name="check-circle" size={20} color="#ffffff" />
-          </TouchableOpacity>
-      </View>
-    </View>
+        <View style={styles.footer}>
+            <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+                <Text style={styles.saveButtonText}>{t('addMedication.saveMedication')}</Text>
+                <MaterialIcons name="check-circle" size={20} color="#ffffff" />
+            </TouchableOpacity>
+        </View>
+        </View>
+    </KeyboardAvoidingView>
   );
 };
 

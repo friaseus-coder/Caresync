@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { usePatient } from '../../hooks/usePatient';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -72,78 +72,83 @@ const PatientFormScreen = () => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: background}}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <View style={[styles.appBar, {borderBottomColor: cardBorder}]}>
-          <TouchableOpacity onPress={() => router.back()}>
-            <MaterialIcons name="arrow-back" size={24} color={textColor} />
-          </TouchableOpacity>
-          <Text style={[styles.appBarTitle, {color: textColor}]}>{isNew ? i18n.t('patient_form.new_title') : i18n.t('patient_form.edit_title')}</Text>
-          <TouchableOpacity onPress={handleSave}>
-            <MaterialIcons name="check" size={24} color={primaryColor} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={[styles.profileHeader, {borderBottomColor: cardBorder}]}>
-          <View style={styles.profileImageContainer}>
-            <Image 
-              // TODO: Replace with a proper image picker
-              source={{ uri: profilePicture || 'https://via.placeholder.com/150' }} 
-              style={[styles.profileImage, { borderColor: backgroundColor || 'transparent' }]} 
-            />
-            <TouchableOpacity style={[styles.editButton, {backgroundColor: primaryColor}]}>
-              <MaterialIcons name="edit" size={16} color={white} />
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+        style={{ flex: 1 }}
+      >
+        <ScrollView contentContainerStyle={[styles.scrollViewContent, { flexGrow: 1 }]}>
+          <View style={[styles.appBar, {borderBottomColor: cardBorder}]}>
+            <TouchableOpacity onPress={() => router.back()}>
+              <MaterialIcons name="arrow-back" size={24} color={textColor} />
+            </TouchableOpacity>
+            <Text style={[styles.appBarTitle, {color: textColor}]}>{isNew ? i18n.t('patient_form.new_title') : i18n.t('patient_form.edit_title')}</Text>
+            <TouchableOpacity onPress={handleSave}>
+              <MaterialIcons name="check" size={24} color={primaryColor} />
             </TouchableOpacity>
           </View>
-        </View>
 
-        <View style={styles.mainContent}>
-            <View style={styles.section}>
-                <Text style={[styles.sectionTitle, {color: textColor}]}>{i18n.t('patient_form.personalization')}</Text>
-                <Text style={[styles.sectionSubtitle, {color: textColor}]}>{i18n.t('patient_form.color_context')}</Text>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.colorPickerContainer}>
-                {colors.map((color) => (
-                    <TouchableOpacity 
-                        key={color} 
-                        style={[styles.colorOption, { backgroundColor: color, borderColor: backgroundColor === color ? primaryColor : 'transparent' }]} 
-                        onPress={() => setBackgroundColor(color)}
-                    />
-                ))}
-                </ScrollView>
+          <View style={[styles.profileHeader, {borderBottomColor: cardBorder}]}>
+            <View style={styles.profileImageContainer}>
+              <Image 
+                // TODO: Replace with a proper image picker
+                source={{ uri: profilePicture || 'https://via.placeholder.com/150' }} 
+                style={[styles.profileImage, { borderColor: backgroundColor || 'transparent' }]} 
+              />
+              <TouchableOpacity style={[styles.editButton, {backgroundColor: primaryColor}]}>
+                <MaterialIcons name="edit" size={16} color={white} />
+              </TouchableOpacity>
             </View>
+          </View>
 
-            <View style={styles.section}>
-                <View style={styles.infoField}>
-                    <Text style={[styles.infoLabel, {color: textColor}]}>{i18n.t('patient_form.full_name')}</Text>
-                    <TextInput style={[styles.infoInput, {color: textColor}]} value={name} onChangeText={setName} />
-                </View>
-                <View style={styles.infoRow}>
-                    <View style={[styles.infoField, { flex: 1 }]}>
-                        <Text style={[styles.infoLabel, {color: textColor}]}>{i18n.t('patient_form.age')}</Text>
-                        <TextInput style={[styles.infoInput, {color: textColor}]} value={age} onChangeText={setAge} keyboardType="numeric" />
-                    </View>
-                    <View style={[styles.infoField, { flex: 1 }]}>
-                        <Text style={[styles.infoLabel, {color: textColor}]}>{i18n.t('patient_form.relation')}</Text>
-                        <TextInput style={[styles.infoInput, {color: textColor}]} value={relationship} onChangeText={setRelationship} />
-                    </View>
-                </View>
-                 <View style={styles.infoField}>
-                    <Text style={[styles.infoLabel, {color: textColor}]}>{i18n.t('patient_form.notes')}</Text>
-                    <View style={[styles.notesInputContainer, {backgroundColor: 'rgba(137, 208, 236, 0.1)', borderColor: 'rgba(137, 208, 236, 0.2)'}]}>
-                        <MaterialIcons name="warning" size={16} color={primaryColor} style={{marginTop: 2}}/>
-                        <TextInput style={[styles.notesInput, {color: textColor}]} value={notes} onChangeText={setNotes} multiline />
-                    </View>
-                </View>
-            </View>
-
-            {!isNew && (
+          <View style={styles.mainContent}>
               <View style={styles.section}>
-                <TouchableOpacity style={[styles.deleteButton, {backgroundColor: '#ff3b30'}]} onPress={handleDelete}>
-                  <Text style={[styles.deleteButtonText, {color: white}]}>{i18n.t('patient_form.delete_patient')}</Text>
-                </TouchableOpacity>
+                  <Text style={[styles.sectionTitle, {color: textColor}]}>{i18n.t('patient_form.personalization')}</Text>
+                  <Text style={[styles.sectionSubtitle, {color: textColor}]}>{i18n.t('patient_form.color_context')}</Text>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.colorPickerContainer}>
+                  {colors.map((color) => (
+                      <TouchableOpacity 
+                          key={color} 
+                          style={[styles.colorOption, { backgroundColor: color, borderColor: backgroundColor === color ? primaryColor : 'transparent' }]} 
+                          onPress={() => setBackgroundColor(color)}
+                      />
+                  ))}
+                  </ScrollView>
               </View>
-            )}
-        </View>
-      </ScrollView>
+
+              <View style={styles.section}>
+                  <View style={styles.infoField}>
+                      <Text style={[styles.infoLabel, {color: textColor}]}>{i18n.t('patient_form.full_name')}</Text>
+                      <TextInput style={[styles.infoInput, {color: textColor}]} value={name} onChangeText={setName} />
+                  </View>
+                  <View style={styles.infoRow}>
+                      <View style={[styles.infoField, { flex: 1 }]}>
+                          <Text style={[styles.infoLabel, {color: textColor}]}>{i18n.t('patient_form.age')}</Text>
+                          <TextInput style={[styles.infoInput, {color: textColor}]} value={age} onChangeText={setAge} keyboardType="numeric" />
+                      </View>
+                      <View style={[styles.infoField, { flex: 1 }]}>
+                          <Text style={[styles.infoLabel, {color: textColor}]}>{i18n.t('patient_form.relation')}</Text>
+                          <TextInput style={[styles.infoInput, {color: textColor}]} value={relationship} onChangeText={setRelationship} />
+                      </View>
+                  </View>
+                    <View style={styles.infoField}>
+                      <Text style={[styles.infoLabel, {color: textColor}]}>{i18n.t('patient_form.notes')}</Text>
+                      <View style={[styles.notesInputContainer, {backgroundColor: 'rgba(137, 208, 236, 0.1)', borderColor: 'rgba(137, 208, 236, 0.2)'}]}>
+                          <MaterialIcons name="warning" size={16} color={primaryColor} style={{marginTop: 2}}/>
+                          <TextInput style={[styles.notesInput, {color: textColor}]} value={notes} onChangeText={setNotes} multiline />
+                      </View>
+                  </View>
+              </View>
+
+              {!isNew && (
+                <View style={styles.section}>
+                  <TouchableOpacity style={[styles.deleteButton, {backgroundColor: '#ff3b30'}]} onPress={handleDelete}>
+                    <Text style={[styles.deleteButtonText, {color: white}]}>{i18n.t('patient_form.delete_patient')}</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

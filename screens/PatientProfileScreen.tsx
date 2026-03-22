@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { theme } from '@/constants/theme';
 import { MaterialIcons } from '@expo/vector-icons';
 import i18n from '@/lib/i18n';
@@ -25,98 +25,103 @@ const PatientProfileScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {/* Top App Bar */}
-        <View style={styles.appBar}>
-          <TouchableOpacity>
-            <MaterialIcons name="arrow-back" size={24} color={theme.palette.black} />
-          </TouchableOpacity>
-          <Text style={styles.appBarTitle}>{i18n.t('patient_form.profile_title')}</Text>
-          <TouchableOpacity>
-            <MaterialIcons name="check" size={24} color={theme.palette.primary} />
-          </TouchableOpacity>
-        </View>
-
-        {/* Profile Header */}
-        <View style={styles.profileHeader}>
-          <View style={styles.profileImageContainer}>
-            <Image 
-              source={{ uri: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC5n5gJbi4-5X259Ajcx2BpGOtCXPjZtStb5vv_LioQxBv01foeHglq3llY5j1YC0NqU0MnIzA2ulV3bW8oeEGjWe825V6kSLcdCWQ1cqJpx5PYCJ6OrHbtrW_7CjAhY4PRsdz4Ot67JdtJAcJnLD-YoZNzyteFPTtJ1q2cCBMWa7RVSXF3ZdXm_ADDpkgOT6TpgBXYePvtKd5uKbQPA3G28onQGZnrq1FCNyBlDdfpJtZoKsqWg_EnBct-O1OZJMIeqbcaCUGBVb0' }} 
-              style={styles.profileImage} 
-            />
-            <TouchableOpacity style={styles.editButton}>
-              <MaterialIcons name="edit" size={16} color={theme.palette.white} />
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+        style={{ flex: 1 }}
+      >
+        <ScrollView contentContainerStyle={[styles.scrollViewContent, { flexGrow: 1 }]}>
+          {/* Top App Bar */}
+          <View style={styles.appBar}>
+            <TouchableOpacity>
+              <MaterialIcons name="arrow-back" size={24} color={theme.palette.black} />
+            </TouchableOpacity>
+            <Text style={styles.appBarTitle}>{i18n.t('patient_form.profile_title')}</Text>
+            <TouchableOpacity>
+              <MaterialIcons name="check" size={24} color={theme.palette.primary} />
             </TouchableOpacity>
           </View>
-          <Text style={styles.patientName}>María</Text>
-          <Text style={styles.patientDetails}>Madre • 72 años</Text>
-        </View>
 
-        <View style={styles.mainContent}>
-            {/* Personalization */}
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>{i18n.t('patient_form.personalization')}</Text>
-                <Text style={styles.sectionSubtitle}>{i18n.t('patient_form.color_context')}</Text>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.colorPickerContainer}>
-                {colors.map((color) => (
-                    <TouchableOpacity 
-                        key={color} 
-                        style={[styles.colorOption, { backgroundColor: color, borderColor: selectedColor === color ? theme.palette.primary : 'transparent' }]} 
-                        onPress={() => setSelectedColor(color)}
-                    />
-                ))}
-                </ScrollView>
+          {/* Profile Header */}
+          <View style={styles.profileHeader}>
+            <View style={styles.profileImageContainer}>
+              <Image 
+                source={{ uri: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC5n5gJbi4-5X259Ajcx2BpGOtCXPjZtStb5vv_LioQxBv01foeHglq3llY5j1YC0NqU0MnIzA2ulV3bW8oeEGjWe825V6kSLcdCWQ1cqJpx5PYCJ6OrHbtrW_7CjAhY4PRsdz4Ot67JdtJAcJnLD-YoZNzyteFPTtJ1q2cCBMWa7RVSXF3ZdXm_ADDpkgOT6TpgBXYePvtKd5uKbQPA3G28onQGZnrq1FCNyBlDdfpJtZoKsqWg_EnBct-O1OZJMIeqbcaCUGBVb0' }} 
+                style={styles.profileImage} 
+              />
+              <TouchableOpacity style={styles.editButton}>
+                <MaterialIcons name="edit" size={16} color={theme.palette.white} />
+              </TouchableOpacity>
             </View>
+            <Text style={styles.patientName}>María</Text>
+            <Text style={styles.patientDetails}>Madre • 72 años</Text>
+          </View>
 
-            {/* Information Fields */}
-            <View style={styles.section}>
-                <View style={styles.infoField}>
-                    <Text style={styles.infoLabel}>{i18n.t('patient_form.full_name')}</Text>
-                    <TextInput style={styles.infoInput} value="María" />
-                </View>
-                <View style={styles.infoRow}>
-                    <View style={[styles.infoField, { flex: 1 }]}>
-                        <Text style={styles.infoLabel}>{i18n.t('patient_form.age')}</Text>
-                        <TextInput style={styles.infoInput} value="72" />
-                    </View>
-                    <View style={[styles.infoField, { flex: 1 }]}>
-                        <Text style={styles.infoLabel}>{i18n.t('patient_form.relation')}</Text>
-                        <TextInput style={styles.infoInput} value="Madre" />
-                    </View>
-                </View>
-                 <View style={styles.infoField}>
-                    <Text style={styles.infoLabel}>{i18n.t('patient_form.notes')}</Text>
-                    <View style={styles.notesInputContainer}>
-                        <MaterialIcons name="warning" size={16} color={theme.palette.primary} style={{marginTop: 2}}/>
-                        <TextInput style={styles.notesInput} value="Alérgica a la penicilina" multiline />
-                    </View>
-                </View>
-            </View>
+          <View style={styles.mainContent}>
+              {/* Personalization */}
+              <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>{i18n.t('patient_form.personalization')}</Text>
+                  <Text style={styles.sectionSubtitle}>{i18n.t('patient_form.color_context')}</Text>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.colorPickerContainer}>
+                  {colors.map((color) => (
+                      <TouchableOpacity 
+                          key={color} 
+                          style={[styles.colorOption, { backgroundColor: color, borderColor: selectedColor === color ? theme.palette.primary : 'transparent' }]} 
+                          onPress={() => setSelectedColor(color)}
+                      />
+                  ))}
+                  </ScrollView>
+              </View>
 
-            {/* Active Medications */}
-            <View style={styles.section}>
-                 <View style={styles.medicationHeader}>
-                    <Text style={styles.sectionTitle}>{i18n.t('patient_form.active_medications')}</Text>
-                    <TouchableOpacity style={styles.addButton}>
-                        <MaterialIcons name="add-circle" size={18} color={theme.palette.primary} />
-                        <Text style={styles.addButtonLabel}>{i18n.t('patient_form.add')}</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.medicationsContainer}>
-                {medications.map((med) => (
-                    <TouchableOpacity key={med.id} style={styles.medicationCard}>
-                        <Image source={{ uri: med.image }} style={styles.medicationImage} />
-                        <View style={styles.medicationInfo}>
-                            <Text style={styles.medicationName}>{med.name}</Text>
-                            <Text style={styles.medicationDosage}>{med.dosage}</Text>
-                        </View>
-                        <MaterialIcons name="chevron-right" size={24} color="#ccc" />
-                    </TouchableOpacity>
-                ))}
-                </View>
-            </View>
-        </View>
-      </ScrollView>
+              {/* Information Fields */}
+              <View style={styles.section}>
+                  <View style={styles.infoField}>
+                      <Text style={styles.infoLabel}>{i18n.t('patient_form.full_name')}</Text>
+                      <TextInput style={styles.infoInput} value="María" />
+                  </View>
+                  <View style={styles.infoRow}>
+                      <View style={[styles.infoField, { flex: 1 }]}>
+                          <Text style={styles.infoLabel}>{i18n.t('patient_form.age')}</Text>
+                          <TextInput style={styles.infoInput} value="72" />
+                      </View>
+                      <View style={[styles.infoField, { flex: 1 }]}>
+                          <Text style={styles.infoLabel}>{i18n.t('patient_form.relation')}</Text>
+                          <TextInput style={styles.infoInput} value="Madre" />
+                      </View>
+                  </View>
+                  <View style={styles.infoField}>
+                      <Text style={styles.infoLabel}>{i18n.t('patient_form.notes')}</Text>
+                      <View style={styles.notesInputContainer}>
+                          <MaterialIcons name="warning" size={16} color={theme.palette.primary} style={{marginTop: 2}}/>
+                          <TextInput style={styles.notesInput} value="Alérgica a la penicilina" multiline />
+                      </View>
+                  </View>
+              </View>
+
+              {/* Active Medications */}
+              <View style={styles.section}>
+                  <View style={styles.medicationHeader}>
+                      <Text style={styles.sectionTitle}>{i18n.t('patient_form.active_medications')}</Text>
+                      <TouchableOpacity style={styles.addButton}>
+                          <MaterialIcons name="add-circle" size={18} color={theme.palette.primary} />
+                          <Text style={styles.addButtonLabel}>{i18n.t('patient_form.add')}</Text>
+                      </TouchableOpacity>
+                  </View>
+                  <View style={styles.medicationsContainer}>
+                  {medications.map((med) => (
+                      <TouchableOpacity key={med.id} style={styles.medicationCard}>
+                          <Image source={{ uri: med.image }} style={styles.medicationImage} />
+                          <View style={styles.medicationInfo}>
+                              <Text style={styles.medicationName}>{med.name}</Text>
+                              <Text style={styles.medicationDosage}>{med.dosage}</Text>
+                          </View>
+                          <MaterialIcons name="chevron-right" size={24} color="#ccc" />
+                      </TouchableOpacity>
+                  ))}
+                  </View>
+              </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

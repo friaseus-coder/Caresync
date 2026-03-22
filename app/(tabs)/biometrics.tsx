@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, TextInput, FlatList, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, TextInput, FlatList, Image, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { theme } from '@/constants/theme';
 import { MaterialIcons } from '@expo/vector-icons';
 import i18n from '@/lib/i18n';
@@ -70,18 +70,16 @@ const BiometricScreen = () => {
       <View style={styles.measurementGrid}>
         {item.weight && (
           <View style={styles.gridItemContainer}>
-            <Text style={styles.gridItem}>{i18n.t('biometrics.weight')}: {item.weight} kg</Text>
+            <Text style={styles.gridItem}>{i18n.t('biometrics.weight')}: {item.weight} {i18n.t('biometrics.units.kg')}</Text>
             {getTrendIcon(item.weight, 'weight', index)}
           </View>
         )}
-        {item.height && <Text style={styles.gridItem}>{i18n.t('biometrics.height')}: {item.height} cm</Text>}
+        {item.height && <Text style={styles.gridItem}>{i18n.t('biometrics.height')}: {item.height} {i18n.t('biometrics.units.cm')}</Text>}
         {item.bloodPressure && <Text style={styles.gridItem}>{i18n.t('biometrics.blood_pressure')}: {item.bloodPressure}</Text>}
-        {item.bloodGlucose && (
           <View style={styles.gridItemContainer}>
-            <Text style={styles.gridItem}>{i18n.t('biometrics.blood_glucose')}: {item.bloodGlucose} mg/dL</Text>
+            <Text style={styles.gridItem}>{i18n.t('biometrics.blood_glucose')}: {item.blood_glucose || item.bloodGlucose} {i18n.t('biometrics.units.mgdl')}</Text>
             {getTrendIcon(item.bloodGlucose, 'bloodGlucose', index)}
           </View>
-        )}
       </View>
       {item.otherMeasures && (
         <View style={styles.customValuesContainer}>
@@ -114,74 +112,79 @@ const BiometricScreen = () => {
         </ScrollView>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.formCard}>
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>{i18n.t('biometrics.weight')} (kg)</Text>
-            <TextInput style={styles.input} value={weight} onChangeText={setWeight} keyboardType="numeric" placeholder="0.0" />
-          </View>
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>{i18n.t('biometrics.height')} (cm)</Text>
-            <TextInput style={styles.input} value={height} onChangeText={setHeight} keyboardType="numeric" placeholder="0" />
-          </View>
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>{i18n.t('biometrics.blood_pressure')}</Text>
-            <TextInput style={styles.input} value={pressure} onChangeText={setPressure} placeholder="120/80" />
-          </View>
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>{i18n.t('biometrics.blood_glucose')} (mg/dL)</Text>
-            <TextInput style={styles.input} value={glucose} onChangeText={setGlucose} keyboardType="numeric" placeholder="0" />
-          </View>
-
-          {customFields.map((field, index) => (
-            <View key={index} style={styles.customFieldRow}>
-              <TextInput 
-                style={[styles.input, { flex: 2 }]} 
-                placeholder={i18n.t('biometrics.placeholder_name')}
-                value={field.name}
-                onChangeText={(text) => {
-                  const newFields = [...customFields];
-                  newFields[index].name = text;
-                  setCustomFields(newFields);
-                }}
-              />
-              <TextInput 
-                style={[styles.input, { flex: 1 }]} 
-                placeholder={i18n.t('biometrics.placeholder_value')}
-                value={field.value}
-                onChangeText={(text) => {
-                  const newFields = [...customFields];
-                  newFields[index].value = text;
-                  setCustomFields(newFields);
-                }}
-              />
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+        style={{ flex: 1 }}
+      >
+        <ScrollView contentContainerStyle={[styles.scrollContent, { flexGrow: 1 }]}>
+          <View style={styles.formCard}>
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>{i18n.t('biometrics.weight')} ({i18n.t('biometrics.units.kg')})</Text>
+              <TextInput style={styles.input} value={weight} onChangeText={setWeight} keyboardType="numeric" placeholder={i18n.t('biometrics.placeholders.weight')} />
             </View>
-          ))}
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>{i18n.t('biometrics.height')} ({i18n.t('biometrics.units.cm')})</Text>
+              <TextInput style={styles.input} value={height} onChangeText={setHeight} keyboardType="numeric" placeholder={i18n.t('biometrics.placeholders.height')} />
+            </View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>{i18n.t('biometrics.blood_pressure')}</Text>
+              <TextInput style={styles.input} value={pressure} onChangeText={setPressure} placeholder={i18n.t('biometrics.placeholders.pressure')} />
+            </View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>{i18n.t('biometrics.blood_glucose')} ({i18n.t('biometrics.units.mgdl')})</Text>
+              <TextInput style={styles.input} value={glucose} onChangeText={setGlucose} keyboardType="numeric" placeholder={i18n.t('biometrics.placeholders.glucose')} />
+            </View>
 
-          <TouchableOpacity style={styles.addCustomButton} onPress={addCustomField}>
-            <MaterialIcons name="add" size={20} color={activePatient?.bg_color_hex || theme.palette.primary} />
-            <Text style={[styles.addCustomText, activePatient?.bg_color_hex && { color: activePatient.bg_color_hex }]}>{i18n.t('biometrics.add_custom')}</Text>
-          </TouchableOpacity>
+            {customFields.map((field, index) => (
+              <View key={index} style={styles.customFieldRow}>
+                <TextInput 
+                  style={[styles.input, { flex: 2 }]} 
+                  placeholder={i18n.t('biometrics.placeholder_name')}
+                  value={field.name}
+                  onChangeText={(text) => {
+                    const newFields = [...customFields];
+                    newFields[index].name = text;
+                    setCustomFields(newFields);
+                  }}
+                />
+                <TextInput 
+                  style={[styles.input, { flex: 1 }]} 
+                  placeholder={i18n.t('biometrics.placeholder_value')}
+                  value={field.value}
+                  onChangeText={(text) => {
+                    const newFields = [...customFields];
+                    newFields[index].value = text;
+                    setCustomFields(newFields);
+                  }}
+                />
+              </View>
+            ))}
 
-          <TouchableOpacity style={[styles.saveButton, activePatient?.bg_color_hex && { backgroundColor: activePatient.bg_color_hex }]} onPress={handleSave}>
-            <Text style={styles.saveButtonText}>{i18n.t('biometrics.save_measurement')}</Text>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity style={styles.addCustomButton} onPress={addCustomField}>
+              <MaterialIcons name="add" size={20} color={activePatient?.bg_color_hex || theme.palette.primary} />
+              <Text style={[styles.addCustomText, activePatient?.bg_color_hex && { color: activePatient.bg_color_hex }]}>{i18n.t('biometrics.add_custom')}</Text>
+            </TouchableOpacity>
 
-        <View style={styles.historySection}>
-          <Text style={styles.historyTitle}>{i18n.t('analytics.history_title')}</Text>
-          {loading ? (
-            <ActivityIndicator color={activePatient?.bg_color_hex || theme.palette.primary} />
-          ) : (
-            <FlatList
-              data={measurements}
-              renderItem={(props) => renderMeasurementItem({ ...props })}
-              keyExtractor={item => item.id.toString()}
-              scrollEnabled={false}
-            />
-          )}
-        </View>
-      </ScrollView>
+            <TouchableOpacity style={[styles.saveButton, activePatient?.bg_color_hex && { backgroundColor: activePatient.bg_color_hex }]} onPress={handleSave}>
+              <Text style={styles.saveButtonText}>{i18n.t('biometrics.save_measurement')}</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.historySection}>
+            <Text style={styles.historyTitle}>{i18n.t('analytics.history_title')}</Text>
+            {loading ? (
+              <ActivityIndicator color={activePatient?.bg_color_hex || theme.palette.primary} />
+            ) : (
+              <FlatList
+                data={measurements}
+                renderItem={(props) => renderMeasurementItem({ ...props })}
+                keyExtractor={item => item.id.toString()}
+                scrollEnabled={false}
+              />
+            )}
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
