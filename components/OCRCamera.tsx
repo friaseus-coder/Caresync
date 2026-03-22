@@ -1,9 +1,15 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { Camera, useCameraDevice, useFrameProcessor } from 'react-native-vision-camera';
-import { scanOCR } from 'vision-camera-ocr';
-import { runOnJS } from 'react-native-reanimated';
+import React, { useState, useRef, useCallback } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import { Camera, useCameraDevice } from 'react-native-vision-camera';
+import TextRecognition from '@react-native-ml-kit/text-recognition';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from '@/constants/theme';
 import i18n from '@/lib/i18n';
@@ -13,43 +19,74 @@ interface OCRCameraProps {
 }
 
 const OCRCamera: React.FC<OCRCameraProps> = ({ onTextRecognized }) => {
-  const [hasPermission, setHasPermission] = useState(false);
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [capturedText, setCapturedText] = useState<string | null>(null);
   const device = useCameraDevice('back');
-  const [ocrResults, setOcrResults] = useState<string[]>([]);
+  const cameraRef = useRef<Camera>(null);
 
-  useEffect(() => {
+  // Solicitar permisos al montar el componente
+  React.useEffect(() => {
     (async () => {
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'granted');
     })();
   }, []);
 
-  const handleOcrResult = useCallback((result: any) => {
-    // result contains blocks, lines, etc.
-    const detectedText = result.result.blocks.map((b: any) => b.text).join('\n');
-    if (detectedText.length > 10) { // Simple filter to avoid noise
-      setOcrResults(prev => [...new Set([...prev, detectedText])]);
+  const captureAndRecognize = useCallback(async () => {
+    if (!cameraRef.current || isProcessing) return;
+
+    setIsProcessing(true);
+    try {
+      // Capturar foto con VisionCamera v4
+      const photo = await cameraRef.current.takePhoto({
+        flash: 'off',
+      });
+
+      // Ejecutar OCR sobre la imagen capturada
+      const result = await TextRecognition.recognize(`file://${photo.path}`);
+
+      const detectedText = result.blocks
+        .map((block) => block.text)
+        .join('\n')
+        .trim();
+
+      if (detectedText.length > 0) {
+        setCapturedText(detectedText);
+      } else {
+        Alert.alert(i18n.t('analytics.ocr_no_text_alert'));
+      }
+    } catch (error) {
+      console.error('Error durante el OCR:', error);
+      Alert.alert(i18n.t('analytics.ocr_error_alert') ?? 'Error al procesar la imagen');
+    } finally {
+      setIsProcessing(false);
     }
+  }, [isProcessing]);
+
+  const confirmText = useCallback(() => {
+    if (capturedText) {
+      onTextRecognized(capturedText);
+    }
+  }, [capturedText, onTextRecognized]);
+
+  const retakePhoto = useCallback(() => {
+    setCapturedText(null);
   }, []);
 
-  const frameProcessor = useFrameProcessor((frame) => {
-    'worklet';
-    const result = scanOCR(frame);
-    runOnJS(handleOcrResult)(result);
-  }, [handleOcrResult]);
-
-  const confirmText = () => {
-    if (ocrResults.length > 0) {
-      onTextRecognized(ocrResults.join('\n'));
-    } else {
-      Alert.alert(i18n.t('analytics.ocr_no_text_alert'));
-    }
-  };
+  if (hasPermission === null) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color={theme.palette.primary} />
+      </View>
+    );
+  }
 
   if (!hasPermission) {
     return (
       <View style={styles.center}>
-        <Text>{i18n.t('camera.no_access')}</Text>
+        <MaterialIcons name="no-photography" size={64} color="#ccc" />
+        <Text style={styles.permissionText}>{i18n.t('camera.no_access')}</Text>
       </View>
     );
   }
@@ -57,30 +94,73 @@ const OCRCamera: React.FC<OCRCameraProps> = ({ onTextRecognized }) => {
   if (!device) {
     return (
       <View style={styles.center}>
-        <Text>{i18n.t('camera.no_device')}</Text>
+        <MaterialIcons name="videocam-off" size={64} color="#ccc" />
+        <Text style={styles.permissionText}>{i18n.t('camera.no_device')}</Text>
       </View>
     );
   }
 
+  // Estado: texto capturado — mostrar resultado y botones de confirmar/reintentar
+  if (capturedText !== null) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.resultContainer}>
+          <MaterialIcons name="article" size={48} color={theme.palette.primary} />
+          <Text style={styles.resultTitle}>{i18n.t('analytics.ocr_live_results')}</Text>
+          <View style={styles.resultTextBox}>
+            <Text style={styles.resultText} numberOfLines={12}>
+              {capturedText}
+            </Text>
+          </View>
+          <View style={styles.resultActions}>
+            <TouchableOpacity style={styles.retakeButton} onPress={retakePhoto}>
+              <MaterialIcons name="refresh" size={22} color={theme.palette.primary} />
+              <Text style={styles.retakeButtonText}>
+                {i18n.t('analytics.ocr_retake') ?? 'Reintentar'}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.confirmButton} onPress={confirmText}>
+              <MaterialIcons name="check" size={22} color={theme.palette.white} />
+              <Text style={styles.confirmButtonText}>
+                {i18n.t('analytics.ocr_confirm_button')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  // Estado por defecto: viewfinder de cámara
   return (
     <View style={styles.container}>
       <Camera
+        ref={cameraRef}
         style={styles.camera}
         device={device}
         isActive={true}
-        frameProcessor={frameProcessor}
+        photo={true}
       />
       <View style={styles.overlay}>
-        <View style={styles.resultsContainer}>
-          <Text style={styles.resultsTitle}>{i18n.t('analytics.ocr_live_results')}</Text>
-          <Text numberOfLines={5} style={styles.resultsText}>
-            {ocrResults.slice(-3).join('\n')}
-          </Text>
-        </View>
-        <TouchableOpacity style={styles.confirmButton} onPress={confirmText}>
-          <MaterialIcons name="check" size={32} color={theme.palette.white} />
-          <Text style={styles.confirmButtonText}>{i18n.t('analytics.ocr_confirm_button')}</Text>
+        <Text style={styles.hint}>
+          {i18n.t('analytics.ocr_aim_hint') ?? 'Apunta al documento con texto'}
+        </Text>
+        <TouchableOpacity
+          style={[styles.captureButton, isProcessing && styles.captureButtonDisabled]}
+          onPress={captureAndRecognize}
+          disabled={isProcessing}
+        >
+          {isProcessing ? (
+            <ActivityIndicator color={theme.palette.white} />
+          ) : (
+            <MaterialIcons name="camera-alt" size={32} color={theme.palette.white} />
+          )}
         </TouchableOpacity>
+        {isProcessing && (
+          <Text style={styles.processingText}>
+            {i18n.t('analytics.ocr_processing') ?? 'Procesando...'}
+          </Text>
+        )}
       </View>
     </View>
   );
@@ -98,6 +178,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: theme.palette.backgroundLight,
+    gap: 16,
+  },
+  permissionText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    paddingHorizontal: 32,
   },
   overlay: {
     position: 'absolute',
@@ -105,21 +193,77 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: theme.spacing.spacingLarge,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(0,0,0,0.55)',
     alignItems: 'center',
+    gap: 12,
   },
-  resultsContainer: {
-    width: '100%',
-    marginBottom: theme.spacing.spacingMedium,
-  },
-  resultsTitle: {
-    color: '#aaa',
-    fontSize: 12,
-    marginBottom: 4,
-  },
-  resultsText: {
-    color: 'white',
+  hint: {
+    color: '#ddd',
     fontSize: 14,
+    textAlign: 'center',
+  },
+  captureButton: {
+    backgroundColor: theme.palette.primary,
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 4,
+  },
+  captureButtonDisabled: {
+    opacity: 0.6,
+  },
+  processingText: {
+    color: '#bbb',
+    fontSize: 13,
+  },
+  // Pantalla de resultado
+  resultContainer: {
+    flex: 1,
+    backgroundColor: theme.palette.backgroundLight,
+    padding: theme.spacing.spacingLarge,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16,
+  },
+  resultTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: theme.palette.primary,
+  },
+  resultTextBox: {
+    width: '100%',
+    backgroundColor: theme.palette.white,
+    borderRadius: theme.borders.borderRadiusLarge,
+    padding: theme.spacing.spacingLarge,
+    maxHeight: 280,
+    elevation: 2,
+  },
+  resultText: {
+    fontSize: 14,
+    color: '#333',
+    lineHeight: 22,
+  },
+  resultActions: {
+    flexDirection: 'row',
+    gap: 16,
+    marginTop: 8,
+  },
+  retakeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: theme.palette.primary,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    gap: 8,
+  },
+  retakeButtonText: {
+    color: theme.palette.primary,
+    fontWeight: 'bold',
+    fontSize: 15,
   },
   confirmButton: {
     backgroundColor: theme.palette.primary,
@@ -129,11 +273,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 30,
     gap: 8,
+    elevation: 3,
   },
   confirmButtonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 15,
   },
 });
 
